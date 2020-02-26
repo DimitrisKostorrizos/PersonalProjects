@@ -59,9 +59,16 @@ public class FileScanner
             String[] mSplitWords = mFileLine.split("[ ,.]+");
             for(String word:mSplitWords)
             {
-                System.out.println(word + mLineCounter);
-                mWordsArrayList.add(word);
-                mLineCountersArrayList.add(mLineCounter);
+                if(word.length() >= SizeConstants.getMinWordSize())
+                {
+                    if(word.length() > SizeConstants.getMaxWordSize())
+                    {
+                        word = word.substring(0,SizeConstants.getMaxWordSize());
+                    }
+                    System.out.println(word + mLineCounter);
+                    mWordsArrayList.add(word);
+                    mLineCountersArrayList.add(mLineCounter);
+                }
             }
             mLineCounter++;
         }
