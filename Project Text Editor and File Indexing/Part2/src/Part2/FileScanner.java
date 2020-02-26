@@ -65,7 +65,6 @@ public class FileScanner
             }
             mLineCounter++;
         }
-        IndexingTable mFileTable = new IndexingTable(mWordsArrayList, mLineCountersArrayList);
-        return mFileTable;
+        return new IndexingTable(mWordsArrayList, mLineCountersArrayList);
     }
 }
