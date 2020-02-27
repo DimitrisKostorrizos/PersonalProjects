@@ -3,8 +3,6 @@ package Part2;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Arrays;
 
 public class BufferIndexFileWriter
 {
@@ -34,14 +32,19 @@ public class BufferIndexFileWriter
         FileWriter IndexFileWriter;
         try
         {
-            IndexFileWriter = new FileWriter(Filename + ".txt.ndx");
+            IndexFileWriter = new FileWriter(Filename + ".ndx");
             BufferedWriter FileWriter = new BufferedWriter(IndexFileWriter,SizeConstants.getBufferSize());
             for(int index = 0; index < mIndexingTable.getTupleVector().size(); index++)
             {
                 String mWord = mIndexingTable.getTupleVector().get(index).getkey();
                 Integer mLineCounter = mIndexingTable.getTupleVector().get(index).getValue();
 
-                String mLine = mWord.concat("  ").concat(String.valueOf(mLineCounter));
+                if(mWord.length() < SizeConstants.getMaxWordSize())
+                {
+                    int mExtensionLength = SizeConstants.getMaxWordSize() - mWord.length();
+                    mWord = mWord.concat(" ".repeat(mExtensionLength));
+                }
+                String mLine = mWord.concat(String.valueOf(mLineCounter));
                 byte[] mLineBytes = mLine.getBytes();
                 for (byte mLineByte : mLineBytes)
                 {

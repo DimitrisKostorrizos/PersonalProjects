@@ -30,7 +30,7 @@ public class FileScanner
     /**Local File Filename Open*/
     protected IndexingTable OpenFile()
     {
-        //Try to open the local file Filename
+        /**Try to open the local file Filename*/
         try 
         {
             File LocalInputFile = new File(this.Filename);
@@ -56,7 +56,7 @@ public class FileScanner
         while (mLocalInputFileReader.hasNextLine())
         {
             String mFileLine = mLocalInputFileReader.nextLine();
-            String[] mSplitWords = mFileLine.split("[ ,.]+");
+            String[] mSplitWords = mFileLine.split("[ ,.?!]+");
             for(String word:mSplitWords)
             {
                 if(word.length() >= SizeConstants.getMinWordSize())

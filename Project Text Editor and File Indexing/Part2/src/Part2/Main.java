@@ -13,7 +13,7 @@ public class Main
 
         FileScanner InputFileScanner = new FileScanner("test.txt");
         IndexingTable InputFileTable = InputFileScanner.OpenFile();
-        BufferIndexFileWriter IndexFileWriter = new BufferIndexFileWriter("test");
+        BufferIndexFileWriter IndexFileWriter = new BufferIndexFileWriter("test.txt");
         IndexFileWriter.BufferPrint(InputFileTable);
     }
 }
