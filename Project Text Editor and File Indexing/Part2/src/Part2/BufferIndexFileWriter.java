@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 public class BufferIndexFileWriter
 {
@@ -34,15 +35,22 @@ public class BufferIndexFileWriter
         try
         {
             IndexFileWriter = new FileWriter(Filename + ".txt.ndx");
-            PrintWriter FileWriter = new PrintWriter(new BufferedWriter(IndexFileWriter,SizeConstants.getBufferSize()));
+            BufferedWriter FileWriter = new BufferedWriter(IndexFileWriter,SizeConstants.getBufferSize());
             for(int index = 0; index < mIndexingTable.getTupleVector().size(); index++)
             {
-                String text = mIndexingTable.toString();
+                String mWord = mIndexingTable.getTupleVector().get(index).getkey();
+                Integer mLineCounter = mIndexingTable.getTupleVector().get(index).getValue();
 
+                String mLine = mWord.concat("  ").concat(String.valueOf(mLineCounter));
+                byte[] mLineBytes = mLine.getBytes();
+                for (byte mLineByte : mLineBytes)
+                {
+                    FileWriter.write(String.format("%8s", Integer.toBinaryString(mLineByte & 0xFF)).replace(' ', '0'));
+                }
             }
-            String text = "test";
-            //Complete the buffer writer
-            FileWriter.write(text);
+            FileWriter.flush();
+            FileWriter.close();
+            IndexFileWriter.close();
         }
         catch (IOException ex)
         {
