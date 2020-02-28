@@ -27,16 +27,16 @@ public class FileScanner
         return Filename;
     }
 
-    /**Local File Filename Open*/
-    protected IndexingTable OpenFile()
+    /**Local File Filename Open
+     Try to open the local file Filename*/
+    protected IndexingTable OpenFileIndexingTable()
     {
-        /**Try to open the local file Filename*/
-        try 
+        try
         {
             File LocalInputFile = new File(this.Filename);
             Scanner LocalInputFileReader = new Scanner(LocalInputFile);
             IndexingTable FileDictionary;
-            FileDictionary= ReadFile(LocalInputFileReader);
+            FileDictionary = CreateFileIndexingTable(LocalInputFileReader);
             LocalInputFileReader.close();
             return FileDictionary;
         }
@@ -48,7 +48,7 @@ public class FileScanner
         }
     }
 
-    private IndexingTable ReadFile(Scanner mLocalInputFileReader)
+    private IndexingTable CreateFileIndexingTable(Scanner mLocalInputFileReader)
     {
         int mLineCounter = 1;
         ArrayList<String> mWordsArrayList = new ArrayList<>();
@@ -73,5 +73,38 @@ public class FileScanner
             mLineCounter++;
         }
         return new IndexingTable(mWordsArrayList, mLineCountersArrayList);
+    }
+
+    protected LinkedList<String> OpenFileLinkedList()
+    {
+        try
+        {
+            File LocalInputFile = new File(this.Filename);
+            Scanner LocalInputFileReader = new Scanner(LocalInputFile);
+            LinkedList<String> FileList = CreateFileLinkedList(LocalInputFileReader);
+            LocalInputFileReader.close();
+            return FileList;
+        }
+        catch (FileNotFoundException e)
+        {
+            System.out.println("File: " + this.Filename + " cannot be opened.");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private LinkedList<String> CreateFileLinkedList(Scanner mLocalInputFileReader)
+    {
+        LinkedList<String> mFileLinkedList = new LinkedList<>();
+        while (mLocalInputFileReader.hasNextLine())
+        {
+            String mFileLine = mLocalInputFileReader.nextLine();
+            if(mFileLine.length() > SizeConstants.getMaxFileLineSize())
+            {
+                mFileLine = mFileLine.substring(0,SizeConstants.getMaxFileLineSize());
+            }
+            mFileLinkedList.add(mFileLine);
+        }
+        return mFileLinkedList;
     }
 }

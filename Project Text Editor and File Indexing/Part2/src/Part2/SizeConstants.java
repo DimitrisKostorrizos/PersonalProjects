@@ -11,8 +11,11 @@ public final class SizeConstants
     /**Maximum Word Length Size*/
     private static int MaxWordSize;
 
+    /**Maximum File Line Length Size*/
+    private static int MaxFileLineSize;
+
     /**Default Class Constructor*/
-    public SizeConstants(int bufferSize, int minWordSize, int maxWordSize)
+    public SizeConstants(int bufferSize, int minWordSize, int maxWordSize, int maxFileLineSize)
     {
         BufferSize = bufferSize;
         MinWordSize = minWordSize;
@@ -37,6 +40,12 @@ public final class SizeConstants
         return MaxWordSize;
     }
 
+    /**Maximum File Line Length Size getter*/
+    public static int getMaxFileLineSize()
+    {
+        return MaxFileLineSize;
+    }
+
     /**Max Buffer(Disk Page) Size setter*/
     public static void setBufferSize(int bufferSize)
     {
@@ -53,5 +62,11 @@ public final class SizeConstants
     public static void setMaxWordSize(int maxWordSize)
     {
         MaxWordSize = maxWordSize;
+    }
+
+    /**Maximum File Line Length Size setter*/
+    public static void setMaxFileLineSize(int maxFileLineSize)
+    {
+        MaxFileLineSize = maxFileLineSize;
     }
 }
