@@ -1,7 +1,6 @@
 package Part2;
 
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class CMD
 {
@@ -9,21 +8,27 @@ public class CMD
     private String Command;
 
     /**CMD Default Constructor*/
-    public CMD()
-    {
+    public CMD() {
     }
 
-    /** Create a Scanner object to read the the Command Line*/
+    /**CMD Default Constructor*/
     protected void ExecuteCommand()
     {
-        Scanner CMDReader = new Scanner(System.in);
-        System.out.println("CMD> ");
-        String mCommand = CMDReader.nextLine();
-        
+        if(this.ValidateCommand())
+        {
+            if(this.Command.equals("^"))
+            {
+                System.out.println("Pointer to first line.");
+            }
+        }
+        else
+        {
+            System.out.println("Invalid Command.");
+        }
     }
 
     /**Check whether the inserted character is valid*/
-    protected boolean ValidateCommand(String mCommand)
+    protected boolean ValidateCommand()
     {
         ArrayList<String> ValidCommands = new ArrayList<>();
         ValidCommands.add("^");
@@ -45,7 +50,7 @@ public class CMD
         ValidCommands.add("v");
         ValidCommands.add("s");
         ValidCommands.add("b");
-        return ValidCommands.contains(mCommand);
+        return ValidCommands.contains(this.Command);
     }
 
     /**CMD Inserted String getter*/
