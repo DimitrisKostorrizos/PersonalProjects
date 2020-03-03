@@ -15,7 +15,7 @@ public class Main
         Scanner CMDScanner = new Scanner(System.in);
 
         /*Create an Instance of the CMD class*/
-        CMD mCmd = new CMD();
+        CMD mCmd = new CMD(InputFilename);
 
         /*Read the Command Line Terminal until the word Exit is inserted*/
         boolean mExit = false;
