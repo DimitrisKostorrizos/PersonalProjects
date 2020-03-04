@@ -15,11 +15,12 @@ public final class SizeConstants
     private static int MaxFileLineSize;
 
     /**Default Class Constructor*/
-    public SizeConstants(int bufferSize, int minWordSize, int maxWordSize, int maxFileLineSize)
+    public SizeConstants(int mBufferSize, int mMinWordSize, int mMaxWordSize, int mMaxFileLineSize)
     {
-        BufferSize = bufferSize;
-        MinWordSize = minWordSize;
-        MaxWordSize = maxWordSize;
+        BufferSize = mBufferSize;
+        MinWordSize = mMinWordSize;
+        MaxWordSize = mMaxWordSize;
+        MaxFileLineSize = mMaxFileLineSize;
     }
 
     /**Max Buffer(Disk Page) Size getter*/

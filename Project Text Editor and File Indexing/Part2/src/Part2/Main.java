@@ -1,5 +1,4 @@
 package Part2;
-import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Main
@@ -14,7 +13,7 @@ public class Main
         /* Create a Scanner object to read the the Command Line*/
         Scanner CMDScanner = new Scanner(System.in);
 
-        CMD mCmd = new CMD();
+        CMD mCmd;
         if(InputFilename.isEmpty())
         {
             /*Create an Instance of the CMD class*/
@@ -22,7 +21,9 @@ public class Main
         }
         else
         {
+            /*Create an Instance of the FilEScanner Class to read the Input */
             FileScanner InputFileScanner = new FileScanner(InputFilename);
+
             /*Create an Instance of the CMD class*/
             mCmd = new CMD(InputFilename, InputFileScanner.FileToLinkedList());
         }
