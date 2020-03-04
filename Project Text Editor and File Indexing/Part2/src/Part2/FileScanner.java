@@ -65,7 +65,6 @@ public class FileScanner
                     {
                         word = word.substring(0,SizeConstants.getMaxWordSize());
                     }
-                    System.out.println(word + mLineCounter);
                     mWordsArrayList.add(word);
                     mLineCountersArrayList.add(mLineCounter);
                 }

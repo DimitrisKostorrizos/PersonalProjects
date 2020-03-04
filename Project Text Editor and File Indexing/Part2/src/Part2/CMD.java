@@ -234,6 +234,36 @@ public class CMD
                 }
                 System.out.println(mLines + " Lines, " + mCharacters + " characters.");
             }
+
+            //Create index file
+            if(this.Command.equals("c"))
+            {
+                ArrayList<String> mLineTable = new ArrayList<>(this.FileLines);
+                BufferIndexFileWriter mIndexTableFileWriter = new BufferIndexFileWriter(this.Filename);
+                ArrayList<Integer> mLineIndex = new ArrayList<>();
+                for(int mIndex = 0; mIndex < this.FileLines.size(); mIndex++)
+                {
+                    mLineIndex.add(mIndex);
+                }
+                IndexingTable mIndexingTable = new IndexingTable(mLineTable, mLineIndex);
+                mIndexTableFileWriter.BufferPrint(mIndexingTable);
+            }
+
+            //Print index file
+            if(this.Command.equals("v"))
+            {
+                ArrayList<String> mLineTable = new ArrayList<>(this.FileLines);
+                ArrayList<Integer> mLineIndex = new ArrayList<>();
+                for(int mIndex = 0; mIndex < this.FileLines.size(); mIndex++)
+                {
+                    mLineIndex.add(mIndex);
+                }
+                IndexingTable mIndexingTable = new IndexingTable(mLineTable, mLineIndex);
+                for(int mIndex = 0; mIndex < mLineIndex.size(); mIndex++)
+                {
+                    System.out.println(mIndexingTable.getTupleVector().get(mIndex).getkey() + " Line: " + mIndexingTable.getTupleVector().get(mIndex).getValue());
+                }
+            }
         }
         else
         {
