@@ -9,11 +9,11 @@ public class IndexingTable
     private Vector<Tuple> TupleVector = new Vector<>();
 
     /**String ArrayList, int ArrayList Constructor*/
-    public IndexingTable(ArrayList<String> mTupleKeys, ArrayList<Integer> mTupleValues)
+    public IndexingTable(ArrayList<String> mTupleKeys, ArrayList<Integer> tupleValues)
     {
         for (int index = 0; index < mTupleKeys.size(); index++) 
         {
-            TupleVector.add(new Tuple(mTupleKeys.get(index),mTupleValues.get(index)));
+            TupleVector.add(new Tuple(mTupleKeys.get(index),tupleValues.get(index)));
         }
     }
 
