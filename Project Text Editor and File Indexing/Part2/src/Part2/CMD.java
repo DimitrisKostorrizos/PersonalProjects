@@ -1,7 +1,6 @@
 package Part2;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,13 +26,24 @@ public class CMD
     /**CMD Input Filename*/
     private String Filename;
 
-    /**CMD Default Constructor*/
+    /**CMD No File Constructor*/
     public CMD(String mFilename)
     {
         this.LineIndex = -1;
         this.FileLines = new LinkedList<>();
         this.Filename = mFilename;
     }
+
+    /**CMD Input File Constructor*/
+    public CMD(String mFilename, LinkedList<String> mFileLines)
+    {
+        this.LineIndex = mFileLines.size() - 1;
+        this.FileLines = mFileLines;
+        this.Filename = mFilename;
+    }
+
+    /**CMD Empty Constructor*/
+    public CMD() { }
 
     /**CMD Execute Command Method*/
     protected void ExecuteCommand()
@@ -57,7 +67,14 @@ public class CMD
             //Set Line Pointer to Previous Position
             if(this.Command.equals("-"))
             {
-                this.LineIndex = this.LineIndex == -1? -1: this.LineIndex - 1;
+                if(this.FileLines.isEmpty())
+                {
+                    this.LineIndex = -1;
+                }
+                else
+                {
+                    this.LineIndex = this.LineIndex == 0? 0: this.LineIndex - 1;
+                }
                 System.out.println("Pointer set to previous line.");
             }
 
@@ -120,7 +137,7 @@ public class CMD
                {
                    if(this.mPrintLineNumbers)
                    {
-                       System.out.println(mIndex + ")   " + mLine);
+                       System.out.println(mIndex + 1 + ")   " + mLine);
                        mIndex++;
                    }
                    else
@@ -161,7 +178,7 @@ public class CMD
             //Quit without save
             if(this.Command.equals("q"))
             {
-                System.out.println("Exiting without saving.");
+                System.out.println("Exiting without save.");
                 exit(0);
             }
 
@@ -170,8 +187,7 @@ public class CMD
             {
                 try
                 {
-                    //File LocalOutputFile = new File(this.Filename);
-                    File LocalOutputFile = new File("Output.txt");
+                    File LocalOutputFile = new File(this.Filename);
                     FileWriter LocalOutputFileWriter = new FileWriter(LocalOutputFile);
                     for(String mLine : this.FileLines)
                     {
@@ -192,8 +208,7 @@ public class CMD
             {
                 try
                 {
-                    //File LocalOutputFile = new File(this.Filename);
-                    File LocalOutputFile = new File("Output.txt");
+                    File LocalOutputFile = new File(this.Filename);
                     FileWriter LocalOutputFileWriter = new FileWriter(LocalOutputFile);
                     for(String mLine : this.FileLines)
                     {
@@ -246,7 +261,8 @@ public class CMD
                     mLineIndex.add(mIndex);
                 }
                 IndexingTable mIndexingTable = new IndexingTable(mLineTable, mLineIndex);
-                mIndexTableFileWriter.BufferPrint(mIndexingTable);
+                mIndexTableFileWriter.IndexingTableByteFileWrite(mIndexingTable);
+                System.out.println("Index file was created successfully.");
             }
 
             //Print index file
@@ -261,8 +277,20 @@ public class CMD
                 IndexingTable mIndexingTable = new IndexingTable(mLineTable, mLineIndex);
                 for(int mIndex = 0; mIndex < mLineIndex.size(); mIndex++)
                 {
-                    System.out.println(mIndexingTable.getTupleVector().get(mIndex).getkey() + " Line: " + mIndexingTable.getTupleVector().get(mIndex).getValue());
+                    System.out.println(mIndexingTable.getTupleVector().get(mIndex).getKey() + " Line: " + mIndexingTable.getTupleVector().get(mIndex).getValue());
                 }
+            }
+
+            //Print lines of word serial(Linear) search.
+            if(this.Command.equals("s"))
+            {
+                //To add
+            }
+
+            //Print lines of word binary search.
+            if(this.Command.equals("b"))
+            {
+                //To add
             }
         }
         else
@@ -297,33 +325,9 @@ public class CMD
         return ValidCommands.contains(this.Command);
     }
 
-    /**CMD Inserted String getter*/
-    public String getCommand()
-    {
-        return Command;
-    }
-
-    /**CMD File Line Index getter*/
-    public int getLineIndex()
-    {
-        return LineIndex;
-    }
-
-    /**CMD File Lines Linked List getter*/
-    public LinkedList<String> getFileLines()
-    {
-        return FileLines;
-    }
-
     /**CMD Inserted String setter*/
     public void setCommand(String command)
     {
         Command = command;
-    }
-
-    /**CMD File Line Index setter*/
-    public void setLineIndex(int lineIndex)
-    {
-        LineIndex = lineIndex;
     }
 }

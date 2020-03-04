@@ -15,21 +15,9 @@ public class FileScanner
         Filename = filename;
     }
 
-    /**Local File Filename Setter*/
-    protected void setFilename(String filename)
-    {
-        Filename = filename;
-    }
-
-    /**Local File Filename Getter*/
-    protected String getFilename()
-    {
-        return Filename;
-    }
-
     /**Local File Filename Open
      Try to open the local file Filename*/
-    protected IndexingTable OpenFileIndexingTable()
+    protected IndexingTable FileToIndexingTable()
     {
         try
         {
@@ -74,7 +62,7 @@ public class FileScanner
         return new IndexingTable(mWordsArrayList, mLineCountersArrayList);
     }
 
-    protected LinkedList<String> OpenFileLinkedList()
+    protected LinkedList<String> FileToLinkedList()
     {
         try
         {
@@ -98,7 +86,7 @@ public class FileScanner
         while (mLocalInputFileReader.hasNextLine())
         {
             String mFileLine = mLocalInputFileReader.nextLine();
-            if(mFileLine.length() > SizeConstants.getMaxFileLineSize())
+            if(mFileLine.length() < SizeConstants.getMaxFileLineSize())
             {
                 mFileLine = mFileLine.substring(0,SizeConstants.getMaxFileLineSize());
             }

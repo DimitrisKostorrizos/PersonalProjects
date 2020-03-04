@@ -22,10 +22,4 @@ public class IndexingTable
     {
         return TupleVector;
     }
-
-    /**Vector that contains String,Int tuples setter*/
-    public void setTupleVector(Vector<Tuple> tupleVector)
-    {
-        TupleVector = tupleVector;
-    }
 }

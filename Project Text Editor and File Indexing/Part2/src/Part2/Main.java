@@ -14,30 +14,30 @@ public class Main
         /* Create a Scanner object to read the the Command Line*/
         Scanner CMDScanner = new Scanner(System.in);
 
-        /*Create an Instance of the CMD class*/
-        CMD mCmd = new CMD(InputFilename);
+        CMD mCmd = new CMD();
+        if(InputFilename.isEmpty())
+        {
+            /*Create an Instance of the CMD class*/
+            mCmd = new CMD(InputFilename);
+        }
+        else
+        {
+            FileScanner InputFileScanner = new FileScanner(InputFilename);
+            /*Create an Instance of the CMD class*/
+            mCmd = new CMD(InputFilename, InputFileScanner.FileToLinkedList());
+        }
 
-        /*Read the Command Line Terminal until the word Exit is inserted*/
-        boolean mExit = false;
-        while(!mExit)
+
+
+        /*Read the Command Line Terminal*/
+        while(true)
         {
             System.out.println("CMD> ");
             String mInputCommand = CMDScanner.nextLine();
-            if(mInputCommand.equals("Exit"))
-            {
-                mExit = true;
-            }
-            else
-            {
-                mCmd.setCommand(mInputCommand);
-                mCmd.ExecuteCommand();
-            }
+            mCmd.setCommand(mInputCommand);
+            mCmd.ExecuteCommand();
         }
 
-        FileScanner InputFileScanner = new FileScanner(InputFilename);
-//        IndexingTable InputFileTable = InputFileScanner.OpenFileIndexingTable();
-//        BufferIndexFileWriter IndexFileWriter = new BufferIndexFileWriter(InputFilename);
-//        IndexFileWriter.BufferPrint(InputFileTable);
-        LinkedList<String> InputFileLinkedList = InputFileScanner.OpenFileLinkedList();
+
     }
 }

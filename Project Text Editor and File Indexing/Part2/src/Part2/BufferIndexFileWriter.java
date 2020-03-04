@@ -27,7 +27,7 @@ public class BufferIndexFileWriter
         Filename = filename;
     }
 
-    public void BufferPrint(IndexingTable mIndexingTable)
+    public void IndexingTableByteFileWrite(IndexingTable mIndexingTable)
     {
         FileWriter IndexFileWriter;
         try
@@ -36,7 +36,7 @@ public class BufferIndexFileWriter
             BufferedWriter FileWriter = new BufferedWriter(IndexFileWriter,SizeConstants.getBufferSize());
             for(int index = 0; index < mIndexingTable.getTupleVector().size(); index++)
             {
-                String mWord = mIndexingTable.getTupleVector().get(index).getkey();
+                String mWord = mIndexingTable.getTupleVector().get(index).getKey();
                 Integer mLineCounter = mIndexingTable.getTupleVector().get(index).getValue();
 
                 if(mWord.length() < SizeConstants.getMaxWordSize())
@@ -44,6 +44,7 @@ public class BufferIndexFileWriter
                     int mExtensionLength = SizeConstants.getMaxWordSize() - mWord.length();
                     mWord = mWord.concat(" ".repeat(mExtensionLength));
                 }
+
                 String mLine = mWord.concat(String.valueOf(mLineCounter));
                 byte[] mLineBytes = mLine.getBytes();
                 for (byte mLineByte : mLineBytes)

@@ -2,50 +2,38 @@ package Part2;
 
 public class Tuple implements Comparable<Tuple>
 {
-    /**Tuple (Left) Tuple key string*/
-    private String key;
+    /**Tuple (Left) Tuple Key string*/
+    private String Key;
 
     /**Tuple (Right) Tuple Value int*/
-    private int value;
+    private Integer Value;
 
     /**String,int Constructor**/
-    public Tuple(String key, int value) 
+    public Tuple(String mKey, Integer mValue)
     {
-        this.key = key;
-        this.value = value;
+        this.Key = mKey;
+        this.Value = mValue;
     }
 
-    /**Tuple (Left) Tuple key string getter*/
-    public String getkey()
+    /**Tuple (Left) Tuple Key string getter*/
+    public String getKey()
     {
-        return key;
+        return Key;
     }
 
     /**Tuple (Right) Tuple Value int getter*/
-    public int getValue()
+    public Integer getValue()
     {
-        return value;
-    }
-
-    /**Tuple (Left) Tuple key string setter*/
-    public void setkey(String key)
-    {
-        key = key;
-    }
-
-    /**Tuple (Right) Tuple Value int setter*/
-    public void setValue(int value)
-    {
-        this.value = value;
+        return Value;
     }
 
     @Override
     public int compareTo(Tuple other)
     {
-        /** compareTo should return < 0 if this is supposed to be
+        /* compareTo should return < 0 if this is supposed to be
          less than other, > 0 if this is supposed to be greater than
          other and 0 if they are supposed to be equal*/
-        int mkey = this.getkey().compareTo(other.getkey());
-        return mkey == 0 ? this.getkey().compareTo(other.getkey()) : mkey;
+        int mKey = this.getKey().compareTo(other.getKey());
+        return mKey == 0 ? this.getKey().compareTo(other.getKey()) : mKey;
     }
 }
