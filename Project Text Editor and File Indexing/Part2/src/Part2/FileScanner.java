@@ -86,7 +86,7 @@ public class FileScanner
         while (mLocalInputFileReader.hasNextLine())
         {
             String mFileLine = mLocalInputFileReader.nextLine();
-            if(mFileLine.length() < SizeConstants.getMaxFileLineSize())
+            if(mFileLine.length() > SizeConstants.getMaxFileLineSize())
             {
                 mFileLine = mFileLine.substring(0,SizeConstants.getMaxFileLineSize());
             }

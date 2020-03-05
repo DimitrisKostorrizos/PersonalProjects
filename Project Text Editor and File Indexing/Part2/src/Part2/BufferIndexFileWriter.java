@@ -1,9 +1,9 @@
 package Part2;
 
-import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class BufferIndexFileWriter
 {
@@ -16,13 +16,17 @@ public class BufferIndexFileWriter
         Filename = filename;
     }
 
-    public void IndexingTableByteFileWrite(IndexingTable mIndexingTable)
+    public int IndexingTableByteFileWrite(IndexingTable mIndexingTable)
     {
         FileWriter IndexFileWriter;
         try
         {
             IndexFileWriter = new FileWriter(Filename + ".ndx");
-            ByteBuffer FileWriter = ByteBuffer.allocate(SizeConstants.getBufferSize());
+            ByteBuffer mByteBuffer = ByteBuffer.allocate(SizeConstants.getBufferSize());
+            int mIndexRecordSize = SizeConstants.getMaxWordSize() + 4;
+            int mBufferRecordCapacity = SizeConstants.getBufferSize()/mIndexRecordSize;
+            int mNumberOfPages = 0;
+
             for(int index = 0; index < mIndexingTable.getTupleVector().size(); index++)
             {
                 String mWord = mIndexingTable.getTupleVector().get(index).getKey();
@@ -34,21 +38,30 @@ public class BufferIndexFileWriter
                     mWord = mWord.concat(" ".repeat(mExtensionLength));
                 }
 
-                String mLine = mWord.concat(String.valueOf(mLineCounter));
-                FileWriter.put(mLine.getBytes());
-//                for (byte mLineByte : mLineBytes)
-//                {
-//                    FileWriter.put(String.format("%8s", Integer.toBinaryString(mLineByte & 0xFF)).replace(' ', '0'));
-//                }
+                mByteBuffer.put(mWord.getBytes());
+                mByteBuffer.putInt(mLineCounter);
+
+                if(mByteBuffer.position() == mBufferRecordCapacity * mIndexRecordSize)
+                {
+                    IndexFileWriter.write(Arrays.toString(mByteBuffer.array()));
+                    mByteBuffer = ByteBuffer.wrap(new byte[mByteBuffer.capacity()]);
+                    mNumberOfPages++;
+                }
             }
-//            FileWriter.flush();
-//            FileWriter.close();
+            if(mByteBuffer.position() != 0)
+            {
+                IndexFileWriter.write(Arrays.toString(mByteBuffer.array()));
+                mNumberOfPages++;
+            }
+            IndexFileWriter.flush();
             IndexFileWriter.close();
+            return mNumberOfPages;
         }
         catch (IOException ex)
         {
             System.out.println("File: " + this.Filename + " cannot be opened.");
             ex.printStackTrace();
+            return 0;
         }
     }
 }

@@ -253,28 +253,43 @@ public class CMD
             //Create index file
             if(this.Command.equals("c"))
             {
-                ArrayList<String> mLineTable = new ArrayList<>(this.FileLines);
-                BufferIndexFileWriter mIndexTableFileWriter = new BufferIndexFileWriter(this.Filename);
+                ArrayList<String> mWordList = new ArrayList<>();
                 ArrayList<Integer> mLineIndex = new ArrayList<>();
-                for(int mIndex = 0; mIndex < this.FileLines.size(); mIndex++)
+                int mLineCounter = 1;
+                for(String mLine : this.FileLines)
                 {
-                    mLineIndex.add(mIndex);
+                    String[] mSplitWords = mLine.split("[ ,.?!]+");
+                    for(String word:mSplitWords)
+                    {
+                        if(word.length() >= SizeConstants.getMinWordSize())
+                        {
+                            if(word.length() > SizeConstants.getMaxWordSize())
+                            {
+                                word = word.substring(0,SizeConstants.getMaxWordSize());
+                            }
+                            mWordList.add(word);
+                            mLineIndex.add(mLineCounter);
+                        }
+                    }
+                    mLineCounter++;
                 }
-                IndexingTable mIndexingTable = new IndexingTable(mLineTable, mLineIndex);
-                mIndexTableFileWriter.IndexingTableByteFileWrite(mIndexingTable);
-                System.out.println("Index file was created successfully.");
+                BufferIndexFileWriter mIndexTableFileWriter = new BufferIndexFileWriter(this.Filename);
+                IndexingTable mIndexingTable = new IndexingTable(mWordList, mLineIndex);
+                int mNumberOfPages = mIndexTableFileWriter.IndexingTableByteFileWrite(mIndexingTable);
+                System.out.print("Index file was created successfully.");
+                System.out.println("Data pages of size " + SizeConstants.getBufferSize() + " bytes: " + mNumberOfPages);
             }
 
             //Print index file
             if(this.Command.equals("v"))
             {
-                ArrayList<String> mLineTable = new ArrayList<>(this.FileLines);
+                ArrayList<String> mWordList = new ArrayList<>(this.FileLines);
                 ArrayList<Integer> mLineIndex = new ArrayList<>();
                 for(int mIndex = 0; mIndex < this.FileLines.size(); mIndex++)
                 {
                     mLineIndex.add(mIndex);
                 }
-                IndexingTable mIndexingTable = new IndexingTable(mLineTable, mLineIndex);
+                IndexingTable mIndexingTable = new IndexingTable(mWordList, mLineIndex);
                 for(int mIndex = 0; mIndex < mLineIndex.size(); mIndex++)
                 {
                     System.out.println(mIndexingTable.getTupleVector().get(mIndex).getKey() + " Line: " + mIndexingTable.getTupleVector().get(mIndex).getValue());
