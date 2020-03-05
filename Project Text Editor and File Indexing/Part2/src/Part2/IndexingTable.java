@@ -15,6 +15,7 @@ public class IndexingTable
         {
             TupleVector.add(new Tuple(mTupleKeys.get(index),tupleValues.get(index)));
         }
+        //TupleVector.sort(Tuple::compareTo);
     }
 
     /**Vector that contains String,Int tuples getter*/

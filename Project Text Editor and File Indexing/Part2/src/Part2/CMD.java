@@ -287,7 +287,7 @@ public class CMD
                 ArrayList<Integer> mLineIndex = new ArrayList<>();
                 for(int mIndex = 0; mIndex < this.FileLines.size(); mIndex++)
                 {
-                    mLineIndex.add(mIndex);
+                    mLineIndex.add(mIndex + 1);
                 }
                 IndexingTable mIndexingTable = new IndexingTable(mWordList, mLineIndex);
                 for(int mIndex = 0; mIndex < mLineIndex.size(); mIndex++)
