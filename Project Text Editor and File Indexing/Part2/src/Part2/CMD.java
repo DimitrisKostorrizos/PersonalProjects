@@ -305,7 +305,33 @@ public class CMD
 
                 ArrayList<Integer> mMatchingPositions = new ArrayList<>();
 
-                ReadIndexFile(this.Filename, mMatchingPositions, mInputWord);
+                int mLineCounter = LinearReadIndexFile(this.Filename, mMatchingPositions, mInputWord);
+
+                if(mMatchingPositions.isEmpty())
+                {
+                    System.out.println("The word: " + mInputWord + " has not been found.");
+                }
+                else
+                {
+                    System.out.print("The word: " + mInputWord + " has been found on lines: ");
+                    for(Integer position :  mMatchingPositions)
+                    {
+                        System.out.print(position);
+                    }
+                }
+                System.out.println("Disk Accesses: " + mLineCounter);
+            }
+
+            //Print lines of word binary search.
+            if(this.Command.equals("b"))
+            {
+                System.out.println("Type the word that you want to search:");
+                Scanner CMDCurrentLineScanner = new Scanner(System.in);
+                String mInputWord = CMDCurrentLineScanner.nextLine();
+
+                ArrayList<Integer> mMatchingPositions = new ArrayList<>();
+
+                LinearReadIndexFile(this.Filename, mMatchingPositions, mInputWord);
 
                 if(mMatchingPositions.isEmpty())
                 {
@@ -320,12 +346,6 @@ public class CMD
                     }
                     System.out.println(".");
                 }
-            }
-
-            //Print lines of word binary search.
-            if(this.Command.equals("b"))
-            {
-                //To add
             }
         }
         else
@@ -387,26 +407,30 @@ public class CMD
         }
     }
 
-    /**ReadIndexFile*/
-    private void ReadIndexFile(String filename, ArrayList<Integer> matchingPositions, String word)
+    /**LinearReadIndexFile*/
+    private int LinearReadIndexFile(String filename, ArrayList<Integer> matchingPositions, String word)
     {
         try
         {
             File LocalInputFile = new File(filename + ".ndx");
             Scanner LocalInputFileReader = new Scanner(LocalInputFile);
 
+            int mLineCounter = 0;
             while(LocalInputFileReader.hasNext())
             {
                 ByteBuffer mBytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(LocalInputFileReader.nextLine(), SizeConstants.getBufferSize()));
 
                 SearchBytePage(word,mBytePageBuffer.array(), matchingPositions);
+                mLineCounter++;
             }
             LocalInputFileReader.close();
+            return mLineCounter;
         }
         catch (FileNotFoundException e)
         {
             System.out.println("File: " + this.Filename + " cannot be opened.");
             e.printStackTrace();
+            return 0;
         }
     }
 
