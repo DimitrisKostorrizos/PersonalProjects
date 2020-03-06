@@ -1,9 +1,14 @@
 package Part2;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -299,7 +304,26 @@ public class CMD
             //Print lines of word serial(Linear) search.
             if(this.Command.equals("s"))
             {
-                //To add
+                System.out.println("Type the word that you want to search:");
+                Scanner CMDCurrentLineScanner = new Scanner(System.in);
+                String mInputWord = CMDCurrentLineScanner.nextLine();
+
+                ArrayList<Integer> mMatchingPositions = new ArrayList<>();
+
+                ReadIndexFile(this.Filename, mMatchingPositions, mInputWord);
+
+                if(mMatchingPositions.isEmpty())
+                {
+                    System.out.println("The word: " + mInputWord + " not found.");
+                }
+                else
+                {
+                    System.out.println("The word: " + mInputWord + " has been found.");
+                    for(Integer position :  mMatchingPositions)
+                    {
+                        System.out.print(position);
+                    }
+                }
             }
 
             //Print lines of word binary search.
@@ -341,8 +365,70 @@ public class CMD
     }
 
     /**CMD Inserted String setter*/
-    public void setCommand(String command)
+    protected void setCommand(String command)
     {
         Command = command;
+    }
+
+    /**Search byte page for the word*/
+    private void SearchBytePage(String word, byte[] bytePage, ArrayList<Integer> matchingPositions)
+    {
+        if(word.length() > SizeConstants.getMaxWordSize() || word.length() < SizeConstants.getMinWordSize())
+        {
+            return;
+        }
+
+
+        int mRecordSize = (SizeConstants.getMaxWordSize() + 4);
+
+        for(int mIndex = 0; mIndex < bytePage.length; mIndex = mIndex + mRecordSize)
+        {
+            byte [] x = Arrays.copyOfRange(bytePage, mIndex, mIndex + SizeConstants.getMaxWordSize());
+            String mWord = new String(x);
+            mWord = mWord.replaceAll("\\s+","");
+
+            if(mWord.equals(word))
+            {
+                ByteBuffer a = ByteBuffer.wrap(Arrays.copyOfRange(bytePage, mIndex + SizeConstants.getMaxWordSize(), mIndex + mRecordSize));
+                int mWordPosition =  a.getInt();
+                matchingPositions.add(mWordPosition);
+            }
+        }
+    }
+
+    /**ReadIndexFile*/
+    private void ReadIndexFile(String filename, ArrayList<Integer> matchingPositions, String word)
+    {
+        try
+        {
+            File LocalInputFile = new File(filename + ".ndx");
+            Scanner LocalInputFileReader = new Scanner(LocalInputFile);
+            //ByteBuffer mBytePageBuffer = ByteBuffer.allocate(SizeConstants.getBufferSize());
+
+            while(LocalInputFileReader.hasNext())
+            {
+                ByteBuffer mBytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(LocalInputFileReader.nextLine(), SizeConstants.getBufferSize()));
+
+                SearchBytePage(word,mBytePageBuffer.array(), matchingPositions);
+            }
+            LocalInputFileReader.close();
+        }
+        catch (FileNotFoundException e)
+        {
+            System.out.println("File: " + this.Filename + " cannot be opened.");
+            e.printStackTrace();
+        }
+    }
+
+    private byte[] StringToByteArrayTranslator(String stringByteArray, int byteArraySize)
+    {
+        String[] mStringBytesArray = stringByteArray.split("[\\[ \\], ]+");
+        mStringBytesArray = Arrays.copyOfRange(mStringBytesArray, 1, mStringBytesArray.length);
+        byte[] mByteArray = new byte[byteArraySize];
+        for(int mIndex = 0; mIndex < byteArraySize; mIndex++)
+        {
+            mByteArray[mIndex] = Byte.parseByte(mStringBytesArray[mIndex]);
+        }
+        return mByteArray;
     }
 }

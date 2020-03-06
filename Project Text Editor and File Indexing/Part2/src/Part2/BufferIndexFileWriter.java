@@ -43,14 +43,14 @@ public class BufferIndexFileWriter
 
                 if(mByteBuffer.position() == mBufferRecordCapacity * mIndexRecordSize)
                 {
-                    IndexFileWriter.write(Arrays.toString(mByteBuffer.array()));
+                    IndexFileWriter.write(Arrays.toString(mByteBuffer.array()) + "\n");
                     mByteBuffer = ByteBuffer.wrap(new byte[mByteBuffer.capacity()]);
                     mNumberOfPages++;
                 }
             }
             if(mByteBuffer.position() != 0)
             {
-                IndexFileWriter.write(Arrays.toString(mByteBuffer.array()));
+                IndexFileWriter.write(Arrays.toString(mByteBuffer.array()) + "\n");
                 mNumberOfPages++;
             }
             IndexFileWriter.flush();
