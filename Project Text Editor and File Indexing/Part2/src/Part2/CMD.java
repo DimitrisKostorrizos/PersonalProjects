@@ -1,9 +1,6 @@
 package Part2;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -439,28 +436,56 @@ public class CMD
     /**LinearReadIndexFile*/
     private int BinaryReadIndexFile(String filename, ArrayList<Integer> matchingPositions, String word)
     {
-        try
-        {
-            File LocalInputFile = new File(filename + ".ndx");
-            Scanner LocalInputFileReader = new Scanner(LocalInputFile);
-
-            int mLineCounter = 0;
-            while(LocalInputFileReader.hasNext())
-            {
-                ByteBuffer mBytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(LocalInputFileReader.nextLine(), SizeConstants.getBufferSize()));
-
-                SearchBytePage(word,mBytePageBuffer.array(), matchingPositions);
-                mLineCounter++;
-            }
-            LocalInputFileReader.close();
-            return mLineCounter;
-        }
-        catch (FileNotFoundException e)
-        {
-            System.out.println("File: " + this.Filename + " cannot be opened.");
-            e.printStackTrace();
-            return 0;
-        }
+        //TODO
+//        try
+//        {
+//            FileReader LocalInputFile = new FileReader(filename + ".ndx");
+//            LineNumberReader mLineNumberFileReader = new LineNumberReader(LocalInputFile);
+//            while(mLineNumberFileReader.readLine()!= null){}
+//            int mNumberOfLines = mLineNumberFileReader.getLineNumber();
+//            mLineNumberFileReader = null;
+//            LineNumberReader mLineNumberFileReader = new LineNumberReader(LocalInputFile);
+//
+//            int bottom = 0;
+//            int top = mNumberOfLines;
+//            int middle;
+//            int mLineCounter = 0;
+//            while (bottom <= top)
+//            {
+//                middle = (bottom+top)/2;
+//                mLineNumberFileReader.setLineNumber(middle); // jump to this line in the file
+//                String x = mLineNumberFileReader.readLine();
+//                ByteBuffer mBytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(mLineNumberFileReader.readLine(), SizeConstants.getBufferSize()));
+//                SearchBytePage(word, mBytePageBuffer.array(), matchingPositions);
+//                mLineCounter++;
+//                //int comparison = line.compareTo(word);
+//                int comparison =0;
+//                if (comparison == 0)
+//                {
+//                    // found it
+//                    break;
+//                }
+//                else if (comparison < 0)
+//                {
+//                    // line comes before searchValue
+//                    bottom = middle + 1;
+//                }
+//                else
+//                    {
+//                    // line comes after searchValue
+//                    top = middle - 1;
+//                }
+//            }
+//
+//            mLineNumberFileReader.close(); // close the file when you're finished
+//            return mLineCounter;
+//        }
+//        catch(IOException e)
+//        {
+//            System.out.println("File: " + this.Filename + " cannot be opened.");
+//            e.printStackTrace();
+//            return 0;
+//        }
     }
 
     private byte[] StringToByteArrayTranslator(String stringByteArray, int byteArraySize)
