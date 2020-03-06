@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -46,9 +44,6 @@ public class CMD
         this.FileLines = mFileLines;
         this.Filename = mFilename;
     }
-
-    /**CMD Empty Constructor*/
-    public CMD() { }
 
     /**CMD Execute Command Method*/
     protected void ExecuteCommand()
@@ -314,15 +309,16 @@ public class CMD
 
                 if(mMatchingPositions.isEmpty())
                 {
-                    System.out.println("The word: " + mInputWord + " not found.");
+                    System.out.println("The word: " + mInputWord + " has not been found.");
                 }
                 else
                 {
-                    System.out.println("The word: " + mInputWord + " has been found.");
+                    System.out.print("The word: " + mInputWord + " has been found on lines: ");
                     for(Integer position :  mMatchingPositions)
                     {
                         System.out.print(position);
                     }
+                    System.out.println(".");
                 }
             }
 
@@ -378,20 +374,15 @@ public class CMD
             return;
         }
 
-
         int mRecordSize = (SizeConstants.getMaxWordSize() + 4);
 
         for(int mIndex = 0; mIndex < bytePage.length; mIndex = mIndex + mRecordSize)
         {
-            byte [] x = Arrays.copyOfRange(bytePage, mIndex, mIndex + SizeConstants.getMaxWordSize());
-            String mWord = new String(x);
-            mWord = mWord.replaceAll("\\s+","");
+            String mWord = new String(Arrays.copyOfRange(bytePage, mIndex, mIndex + SizeConstants.getMaxWordSize())).replaceAll("\\s+","");
 
             if(mWord.equals(word))
             {
-                ByteBuffer a = ByteBuffer.wrap(Arrays.copyOfRange(bytePage, mIndex + SizeConstants.getMaxWordSize(), mIndex + mRecordSize));
-                int mWordPosition =  a.getInt();
-                matchingPositions.add(mWordPosition);
+                matchingPositions.add(ByteBuffer.wrap(Arrays.copyOfRange(bytePage, mIndex + SizeConstants.getMaxWordSize(), mIndex + mRecordSize)).getInt());
             }
         }
     }
@@ -403,7 +394,6 @@ public class CMD
         {
             File LocalInputFile = new File(filename + ".ndx");
             Scanner LocalInputFileReader = new Scanner(LocalInputFile);
-            //ByteBuffer mBytePageBuffer = ByteBuffer.allocate(SizeConstants.getBufferSize());
 
             while(LocalInputFileReader.hasNext())
             {
@@ -422,7 +412,7 @@ public class CMD
 
     private byte[] StringToByteArrayTranslator(String stringByteArray, int byteArraySize)
     {
-        String[] mStringBytesArray = stringByteArray.split("[\\[ \\], ]+");
+        String[] mStringBytesArray = stringByteArray.split("[\\[ \\],]+");
         mStringBytesArray = Arrays.copyOfRange(mStringBytesArray, 1, mStringBytesArray.length);
         byte[] mByteArray = new byte[byteArraySize];
         for(int mIndex = 0; mIndex < byteArraySize; mIndex++)

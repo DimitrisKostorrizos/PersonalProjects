@@ -88,22 +88,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="445" height="438" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1582748658654" />
-    <state width="1345" height="223" key="GridCell.Tab.0.bottom" timestamp="1583508984475">
+    <state width="1345" height="179" key="GridCell.Tab.0.bottom" timestamp="1583509322677">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="223" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583508984475" />
-    <state width="1345" height="223" key="GridCell.Tab.0.center" timestamp="1583508984475">
+    <state width="1345" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583509322677" />
+    <state width="1345" height="179" key="GridCell.Tab.0.center" timestamp="1583509322677">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="223" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583508984475" />
-    <state width="1345" height="223" key="GridCell.Tab.0.left" timestamp="1583508984475">
+    <state width="1345" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583509322677" />
+    <state width="1345" height="179" key="GridCell.Tab.0.left" timestamp="1583509322677">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="223" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583508984475" />
-    <state width="1345" height="223" key="GridCell.Tab.0.right" timestamp="1583508984475">
+    <state width="1345" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583509322677" />
+    <state width="1345" height="179" key="GridCell.Tab.0.right" timestamp="1583509322677">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="223" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583508984475" />
+    <state width="1345" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583509322677" />
     <state width="1345" height="223" key="GridCell.Tab.1.bottom" timestamp="1583508984477">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -134,15 +134,6 @@
     <state x="339" y="17" width="670" height="676" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1583500001989" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/Part2/CMD.java</url>
-          <line>392</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="b.value" />
