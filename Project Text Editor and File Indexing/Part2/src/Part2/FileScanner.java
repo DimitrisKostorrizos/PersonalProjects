@@ -15,53 +15,6 @@ public class FileScanner
         Filename = filename;
     }
 
-    /**Local File Filename Open
-     Try to open the local file Filename*/
-    protected IndexingTable FileToIndexingTable()
-    {
-        try
-        {
-            File LocalInputFile = new File(this.Filename);
-            Scanner LocalInputFileReader = new Scanner(LocalInputFile);
-            IndexingTable FileDictionary;
-            FileDictionary = CreateFileIndexingTable(LocalInputFileReader);
-            LocalInputFileReader.close();
-            return FileDictionary;
-        }
-        catch (FileNotFoundException e)
-        {
-            System.out.println("File: " + this.Filename + " cannot be opened.");
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    private IndexingTable CreateFileIndexingTable(Scanner mLocalInputFileReader)
-    {
-        int mLineCounter = 1;
-        ArrayList<String> mWordsArrayList = new ArrayList<>();
-        ArrayList<Integer> mLineCountersArrayList = new ArrayList<>();
-        while (mLocalInputFileReader.hasNextLine())
-        {
-            String mFileLine = mLocalInputFileReader.nextLine();
-            String[] mSplitWords = mFileLine.split("[ ,.?!]+");
-            for(String word:mSplitWords)
-            {
-                if(word.length() >= SizeConstants.getMinWordSize())
-                {
-                    if(word.length() > SizeConstants.getMaxWordSize())
-                    {
-                        word = word.substring(0,SizeConstants.getMaxWordSize());
-                    }
-                    mWordsArrayList.add(word);
-                    mLineCountersArrayList.add(mLineCounter);
-                }
-            }
-            mLineCounter++;
-        }
-        return new IndexingTable(mWordsArrayList, mLineCountersArrayList);
-    }
-
     protected LinkedList<String> FileToLinkedList()
     {
         try

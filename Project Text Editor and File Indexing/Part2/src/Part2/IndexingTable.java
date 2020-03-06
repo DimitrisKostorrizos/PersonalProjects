@@ -8,14 +8,18 @@ public class IndexingTable
     /**Vector that contains String,Int tuples*/
     private Vector<Tuple> TupleVector = new Vector<>();
 
-    /**String ArrayList, int ArrayList Constructor*/
-    public IndexingTable(ArrayList<String> mTupleKeys, ArrayList<Integer> tupleValues)
+    /**String ArrayList, int ArrayList Constructor, boolean sort*/
+    public IndexingTable(ArrayList<String> mTupleKeys, ArrayList<Integer> tupleValues, boolean sorted)
     {
-        for (int index = 0; index < mTupleKeys.size(); index++) 
+        for (int index = 0; index < mTupleKeys.size(); index++)
         {
             TupleVector.add(new Tuple(mTupleKeys.get(index),tupleValues.get(index)));
         }
-        //TupleVector.sort(Tuple::compareTo);
+
+        if(sorted)
+        {
+            TupleVector.sort(Tuple::compareTo);
+        }
     }
 
     /**Vector that contains String,Int tuples getter*/
