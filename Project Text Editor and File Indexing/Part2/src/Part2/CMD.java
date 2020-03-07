@@ -440,8 +440,7 @@ public class CMD
         {
             File LocalInputFile = new File(filename + ".ndx");
             Scanner LocalInputFileReader = new Scanner(LocalInputFile);
-            String x = LocalInputFileReader.nextLine();
-            x = LocalInputFileReader.nextLine();
+            
             int mLineCounter = 0;
             while(LocalInputFileReader.hasNext())
             {
@@ -459,7 +458,6 @@ public class CMD
             e.printStackTrace();
             return 0;
         }
-        //TODO
     }
 
     private byte[] StringToByteArrayTranslator(String stringByteArray, int byteArraySize)
