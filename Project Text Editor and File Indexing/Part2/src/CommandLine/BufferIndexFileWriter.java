@@ -1,4 +1,4 @@
-package Part2;
+package CommandLine;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -29,8 +29,8 @@ public class BufferIndexFileWriter
 
             for(int index = 0; index < mIndexingTable.getTupleVector().size(); index++)
             {
-                String mWord = mIndexingTable.getTupleVector().get(index).getKey();
-                Integer mLineCounter = mIndexingTable.getTupleVector().get(index).getValue();
+                String mWord = mIndexingTable.getTupleVector().get(index).getLeftValue();
+                Integer mLineCounter = mIndexingTable.getTupleVector().get(index).getRightValue();
 
                 if(mWord.length() < SizeConstants.getMaxWordSize())
                 {

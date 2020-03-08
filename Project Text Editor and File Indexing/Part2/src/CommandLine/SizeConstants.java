@@ -1,4 +1,4 @@
-package Part2;
+package CommandLine;
 
 public final class SizeConstants
 {

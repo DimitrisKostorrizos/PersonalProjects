@@ -1,4 +1,4 @@
-package Part2;
+package CommandLine;
 import java.util.Scanner;
 
 public class Main

@@ -1,4 +1,4 @@
-package Part2;
+package CommandLine;
 
 import java.io.*;
 import java.nio.ByteBuffer;
@@ -289,7 +289,7 @@ public class CMD
                 IndexingTable mIndexingTable = new IndexingTable(mWordList, mLineIndex, false);
                 for(int mIndex = 0; mIndex < mLineIndex.size(); mIndex++)
                 {
-                    System.out.println(mIndexingTable.getTupleVector().get(mIndex).getKey() + " Line: " + mIndexingTable.getTupleVector().get(mIndex).getValue());
+                    System.out.println(mIndexingTable.getTupleVector().get(mIndex).getLeftValue() + " Line: " + mIndexingTable.getTupleVector().get(mIndex).getRightValue());
                 }
             }
 
