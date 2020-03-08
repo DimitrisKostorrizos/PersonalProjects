@@ -270,7 +270,7 @@ public class CMD
                     }
                     mLineCounter++;
                 }
-                BufferIndexFileWriter mIndexTableFileWriter = new BufferIndexFileWriter(this.Filename);
+                IndexFileBufferFileWriter mIndexTableFileWriter = new IndexFileBufferFileWriter(this.Filename);
                 IndexingTable mIndexingTable = new IndexingTable(mWordList, mLineIndex, true);
                 int mNumberOfPages = mIndexTableFileWriter.IndexingTableByteFileWrite(mIndexingTable);
                 System.out.print("Index file was created successfully.");

@@ -17,7 +17,8 @@ public class FileScanner
         Filename = filename;
     }
 
-    /**Method that returns the Linked List object that contains the file lines*/
+    /**Method that returns the Linked List object that contains the file lines
+     * @return the Linked List that contains the file lines in ascending order, or null if the file cannot be read*/
     protected LinkedList<String> FileToLinkedList()
     {
         //Try to open the local file
@@ -45,7 +46,8 @@ public class FileScanner
     }
 
     /**Default constructor for the FileScanner object
-     * @param localInputFileScanner = local file scanner*/
+     * @param localInputFileScanner = local file scanner
+     * @return the Linked List that contains the file lines in ascending order*/
     private LinkedList<String> CreateFileLinkedList(Scanner localInputFileScanner)
     {
         //Create a linked List object for the lines of the file
