@@ -4,47 +4,71 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
+/**Class that reads a file and creates a Linked List object that contains the file lines*/
 public class FileScanner
 {
-    /**Local File Filename*/
+    /**Local file's filename*/
     private String Filename;
 
-    /**String Constructor*/
+    /**Default constructor for the FileScanner object
+     * @param filename = local file's filename*/
     protected FileScanner(String filename)
     {
         Filename = filename;
     }
 
+    /**Method that returns the Linked List object that contains the file lines*/
     protected LinkedList<String> FileToLinkedList()
     {
+        //Try to open the local file
         try
         {
-            File LocalInputFile = new File(this.Filename);
-            Scanner LocalInputFileReader = new Scanner(LocalInputFile);
-            LinkedList<String> FileList = CreateFileLinkedList(LocalInputFileReader);
-            LocalInputFileReader.close();
-            return FileList;
+            //Create the Scanner object for the local file
+            Scanner localInputFileScanner = new Scanner(new File(this.Filename));
+            
+            //Call the CreateFileLinkedList method that creates the Linked List object
+            LinkedList<String> fileList = CreateFileLinkedList(localInputFileScanner);
+            
+            //Close the File Scanner
+            localInputFileScanner.close();
+            
+            //Return the File Linked List
+            return fileList;
         }
         catch (FileNotFoundException e)
         {
+            //Catch the FileNotFoundException and inform the user
             System.out.println("File: " + this.Filename + " cannot be opened.");
             e.printStackTrace();
             return null;
         }
     }
 
-    private LinkedList<String> CreateFileLinkedList(Scanner mLocalInputFileReader)
+    /**Default constructor for the FileScanner object
+     * @param localInputFileScanner = local file scanner*/
+    private LinkedList<String> CreateFileLinkedList(Scanner localInputFileScanner)
     {
-        LinkedList<String> mFileLinkedList = new LinkedList<>();
-        while (mLocalInputFileReader.hasNextLine())
+        //Create a linked List object for the lines of the file
+        LinkedList<String> fileLinesLinkedList = new LinkedList<>();
+
+        //Read the file, line by line until the last line
+        while (localInputFileScanner.hasNextLine())
         {
-            String mFileLine = mLocalInputFileReader.nextLine();
-            if(mFileLine.length() > SizeConstants.getMaxFileLineSize())
+            //Get the current line
+            String fileLine = localInputFileScanner.nextLine();
+
+            //Cut the file line if the length exceeds MaxFileLineSize value
+            if(fileLine.length() > SizeConstants.getMaxFileLineSize())
             {
-                mFileLine = mFileLine.substring(0,SizeConstants.getMaxFileLineSize());
+                //Get the valid part of the file line
+                fileLine = fileLine.substring(0,SizeConstants.getMaxFileLineSize());
             }
-            mFileLinkedList.add(mFileLine);
+
+            //Add the valid file line in the Linked List
+            fileLinesLinkedList.add(fileLine);
         }
-        return mFileLinkedList;
+
+        //Return the LinkedList that contain the file lines
+        return fileLinesLinkedList;
     }
 }

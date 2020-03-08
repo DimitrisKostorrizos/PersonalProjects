@@ -1,73 +1,55 @@
 package CommandLine;
 
+/**Final class that contains the constant values for the Command Line execution*/
 public final class SizeConstants
 {
-    /**Max Buffer(Disk Page) Size*/
+    /**Max buffer(Disk Page) size*/
     private static int BufferSize;
 
-    /**Minimum Word Length Size*/
+    /**Minimum word length size*/
     private static int MinWordSize;
 
-    /**Maximum Word Length Size*/
+    /**Maximum word length size*/
     private static int MaxWordSize;
 
-    /**Maximum File Line Length Size*/
+    /**Maximum file line length size*/
     private static int MaxFileLineSize;
 
-    /**Default Class Constructor*/
-    public SizeConstants(int mBufferSize, int mMinWordSize, int mMaxWordSize, int mMaxFileLineSize)
+    /**Default constructor to create a SizeConstants object 
+     * @param bufferSize = buffer size in bytes
+     * @param minWordSize = minimum word length in ASCII characters
+     * @param maxWordSize = maximum word length in ASCII characters
+     * @param maxFileLineSize = maximum line length that can be read from a file in ASCII characters
+     * that contains the constant valued and is globally available*/
+    public SizeConstants(int bufferSize, int minWordSize, int maxWordSize, int maxFileLineSize)
     {
-        BufferSize = mBufferSize;
-        MinWordSize = mMinWordSize;
-        MaxWordSize = mMaxWordSize;
-        MaxFileLineSize = mMaxFileLineSize;
+        BufferSize = bufferSize;
+        MinWordSize = minWordSize;
+        MaxWordSize = maxWordSize;
+        MaxFileLineSize = maxFileLineSize;
     }
 
-    /**Max Buffer(Disk Page) Size getter*/
+    /**Getter for the buffer size property*/
     public static int getBufferSize()
     {
         return BufferSize;
     }
 
-    /**Minimum Word Length Size getter*/
+    /**Getter for minimum word length size*/
     public static int getMinWordSize()
     {
         return MinWordSize;
     }
 
-    /**Maximum Word Length Size getter*/
+    /**Getter for maximum word length size*/
     public static int getMaxWordSize()
     {
         return MaxWordSize;
     }
 
-    /**Maximum File Line Length Size getter*/
+    /**Getter for maximum file line length size*/
     public static int getMaxFileLineSize()
     {
         return MaxFileLineSize;
-    }
-
-    /**Max Buffer(Disk Page) Size setter*/
-    public static void setBufferSize(int bufferSize)
-    {
-        BufferSize = bufferSize;
-    }
-
-    /**Minimum Word Length Size setter*/
-    public static void setMinWordSize(int minWordSiz)
-    {
-        MinWordSize = minWordSiz;
-    }
-
-    /**Maximum Word Length Size setter*/
-    public static void setMaxWordSize(int maxWordSize)
-    {
-        MaxWordSize = maxWordSize;
-    }
-
-    /**Maximum File Line Length Size setter*/
-    public static void setMaxFileLineSize(int maxFileLineSize)
-    {
-        MaxFileLineSize = maxFileLineSize;
     }
 }
