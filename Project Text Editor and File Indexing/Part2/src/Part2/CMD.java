@@ -306,11 +306,11 @@ public class CMD
 
                 if(mMatchingPositions.isEmpty())
                 {
-                    System.out.println("The word: " + mInputWord + " ,has not been found.");
+                    System.out.println("The word: " + mInputWord + " has not been found.");
                 }
                 else
                 {
-                    System.out.print("The word: " + mInputWord + " ,has been found on lines: ");
+                    System.out.print("The word: " + mInputWord + " has been found on lines: ");
                     for(Integer position :  mMatchingPositions)
                     {
                         System.out.print(position + ",");
@@ -333,11 +333,11 @@ public class CMD
 
                 if(mMatchingPositions.isEmpty())
                 {
-                    System.out.println("The word: " + mInputWord + " ,has not been found.");
+                    System.out.println("The word: " + mInputWord + " has not been found.");
                 }
                 else
                 {
-                    System.out.print("The word: " + mInputWord + " ,has been found on lines: ");
+                    System.out.print("The word: " + mInputWord + " has been found on lines: ");
                     for(Integer position :  mMatchingPositions)
                     {
                         System.out.print(position + ",");
@@ -527,13 +527,13 @@ public class CMD
 
         int mRecordSize = (SizeConstants.getMaxWordSize() + 4);
         String mWord = "";
+        String mLastNonBlankWord = "";
         boolean mFoundAtFirst = false;
         boolean mFoundAtLast = false;
 
         for(int mIndex = 0; mIndex < bytePage.length; mIndex = mIndex + mRecordSize)
         {
             mWord = new String(Arrays.copyOfRange(bytePage, mIndex, mIndex + SizeConstants.getMaxWordSize())).replaceAll("\\s+","");
-
             if(mWord.equals(word))
             {
                 matchingPositions.add(ByteBuffer.wrap(Arrays.copyOfRange(bytePage, mIndex + SizeConstants.getMaxWordSize(), mIndex + mRecordSize)).getInt());
@@ -542,6 +542,10 @@ public class CMD
                     mFoundAtFirst = true;
                 }
             }
+            if(!mWord.trim().isBlank())
+            {
+                mLastNonBlankWord = mWord;
+            }
         }
 
         if(mWord.equals(word))
@@ -549,21 +553,28 @@ public class CMD
             mFoundAtLast = true;
         }
 
-        if(mFoundAtFirst)
-        {
-            return 1;
-        }
-        else if(mFoundAtLast)
-        {
-            return 2;
-        }
         if(matchingPositions.isEmpty())
         {
-            return 3;
+            if(word.compareTo(mLastNonBlankWord) < 0)
+            {
+                return 1;
+            }
+            else if(word.compareTo(mLastNonBlankWord) > 0)
+            {
+                return 2;
+            }
         }
         else
         {
-            return  0;
+            if(mFoundAtFirst)
+            {
+                return 1;
+            }
+            else if(mFoundAtLast)
+            {
+                return 2;
+            }
         }
+        return  0;
     }
 }
