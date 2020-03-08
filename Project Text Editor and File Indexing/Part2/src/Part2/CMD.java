@@ -386,11 +386,11 @@ public class CMD
     }
 
     /**Search byte page for the word*/
-    private void SearchBytePage(String word, byte[] bytePage, ArrayList<Integer> matchingPositions)
+    private int LinearSearchBytePage(String word, byte[] bytePage, ArrayList<Integer> matchingPositions)
     {
         if(word.length() > SizeConstants.getMaxWordSize() || word.length() < SizeConstants.getMinWordSize())
         {
-            return;
+            return -1;
         }
 
         int mRecordSize = (SizeConstants.getMaxWordSize() + 4);
@@ -404,6 +404,7 @@ public class CMD
                 matchingPositions.add(ByteBuffer.wrap(Arrays.copyOfRange(bytePage, mIndex + SizeConstants.getMaxWordSize(), mIndex + mRecordSize)).getInt());
             }
         }
+        return  0;
     }
 
     /**LinearReadIndexFile*/
@@ -415,11 +416,12 @@ public class CMD
             Scanner LocalInputFileReader = new Scanner(LocalInputFile);
 
             int mLineCounter = 0;
-            while(LocalInputFileReader.hasNext())
+            int mWordStatus = 0;
+            while(LocalInputFileReader.hasNext() && mWordStatus == 0)
             {
                 ByteBuffer mBytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(LocalInputFileReader.nextLine(), SizeConstants.getBufferSize()));
 
-                SearchBytePage(word,mBytePageBuffer.array(), matchingPositions);
+                mWordStatus = LinearSearchBytePage(word,mBytePageBuffer.array(), matchingPositions);
                 mLineCounter++;
             }
             LocalInputFileReader.close();
@@ -440,17 +442,51 @@ public class CMD
         {
             File LocalInputFile = new File(filename + ".ndx");
             Scanner LocalInputFileReader = new Scanner(LocalInputFile);
-            
-            int mLineCounter = 0;
+
+            //Get the files lines number.
+            int mMaxFileLines = 0;
             while(LocalInputFileReader.hasNext())
             {
+                LocalInputFileReader.nextLine();
+                mMaxFileLines++;
+            }
+            LocalInputFileReader.reset();
+
+            int mBottomFileLines = 0;
+            int mTopFileLines = mMaxFileLines;
+            int mMiddlePoint;
+            int mDataPageAccessesCounter = 0;
+            int mWordStatus;
+
+            while (mBottomFileLines <= mTopFileLines)
+            {
+                mMiddlePoint = (mBottomFileLines + mTopFileLines)/2;
+                SkipLines(LocalInputFileReader, mMiddlePoint);
+
                 ByteBuffer mBytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(LocalInputFileReader.nextLine(), SizeConstants.getBufferSize()));
 
-                SearchBytePage(word,mBytePageBuffer.array(), matchingPositions);
-                mLineCounter++;
+                mWordStatus = BinarySearchBytePage(word,mBytePageBuffer.array(), matchingPositions);
+                mDataPageAccessesCounter++;
+
+                if (mWordStatus == 0)
+                {
+                    // found it
+                    break;
+                }
+                else if (mWordStatus == 2)
+                {
+                    // line comes before searchValue
+                    mBottomFileLines = mMiddlePoint + 1;
+                }
+                else if (mWordStatus == 1)
+                {
+                    // line comes after searchValue
+                    mTopFileLines = mMiddlePoint - 1;
+                }
+                LocalInputFileReader.reset();
             }
             LocalInputFileReader.close();
-            return mLineCounter;
+            return mDataPageAccessesCounter;
         }
         catch (FileNotFoundException e)
         {
@@ -470,5 +506,65 @@ public class CMD
             mByteArray[mIndex] = Byte.parseByte(mStringBytesArray[mIndex]);
         }
         return mByteArray;
+    }
+
+    public static void SkipLines(Scanner s,int lineNum)
+    {
+        for(int index = 0; index < lineNum;index++)
+        {
+            if(s.hasNextLine())
+            {
+                s.nextLine();
+            }
+        }
+    }
+
+    private int BinarySearchBytePage(String word, byte[] bytePage, ArrayList<Integer> matchingPositions)
+    {
+        if(word.length() > SizeConstants.getMaxWordSize() || word.length() < SizeConstants.getMinWordSize())
+        {
+            return -1;
+        }
+
+        int mRecordSize = (SizeConstants.getMaxWordSize() + 4);
+        String mWord = "";
+        boolean mFoundAtFirst = false;
+        boolean mFoundAtLast = false;
+
+        for(int mIndex = 0; mIndex < bytePage.length; mIndex = mIndex + mRecordSize)
+        {
+            mWord = new String(Arrays.copyOfRange(bytePage, mIndex, mIndex + SizeConstants.getMaxWordSize())).replaceAll("\\s+","");
+
+            if(mWord.equals(word))
+            {
+                matchingPositions.add(ByteBuffer.wrap(Arrays.copyOfRange(bytePage, mIndex + SizeConstants.getMaxWordSize(), mIndex + mRecordSize)).getInt());
+                if(mIndex == 0)
+                {
+                    mFoundAtFirst = true;
+                }
+            }
+        }
+
+        if(mWord.equals(word))
+        {
+            mFoundAtLast = true;
+        }
+
+        if(mFoundAtFirst)
+        {
+            return 1;
+        }
+        else if(mFoundAtLast)
+        {
+            return 2;
+        }
+        if(matchingPositions.isEmpty())
+        {
+            return 3;
+        }
+        else
+        {
+            return  0;
+        }
     }
 }
