@@ -313,7 +313,7 @@ public class CMD
                     System.out.print("The word: " + mInputWord + " ,has been found on lines: ");
                     for(Integer position :  mMatchingPositions)
                     {
-                        System.out.print(position);
+                        System.out.print(position + ",");
                     }
                     System.out.println(".");
                 }
@@ -340,7 +340,7 @@ public class CMD
                     System.out.print("The word: " + mInputWord + " ,has been found on lines: ");
                     for(Integer position :  mMatchingPositions)
                     {
-                        System.out.print(position);
+                        System.out.print(position + ",");
                     }
                     System.out.println(".");
                 }
@@ -450,7 +450,6 @@ public class CMD
                 LocalInputFileReader.nextLine();
                 mMaxFileLines++;
             }
-            LocalInputFileReader.reset();
 
             int mBottomFileLines = 0;
             int mTopFileLines = mMaxFileLines;
@@ -460,6 +459,7 @@ public class CMD
 
             while (mBottomFileLines <= mTopFileLines)
             {
+                LocalInputFileReader = new Scanner(LocalInputFile);
                 mMiddlePoint = (mBottomFileLines + mTopFileLines)/2;
                 SkipLines(LocalInputFileReader, mMiddlePoint);
 
@@ -468,7 +468,7 @@ public class CMD
                 mWordStatus = BinarySearchBytePage(word,mBytePageBuffer.array(), matchingPositions);
                 mDataPageAccessesCounter++;
 
-                if (mWordStatus == 0)
+                if (mWordStatus == 0 || mWordStatus == -1)
                 {
                     // found it
                     break;
@@ -483,7 +483,6 @@ public class CMD
                     // line comes after searchValue
                     mTopFileLines = mMiddlePoint - 1;
                 }
-                LocalInputFileReader.reset();
             }
             LocalInputFileReader.close();
             return mDataPageAccessesCounter;
