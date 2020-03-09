@@ -9,34 +9,37 @@ import java.util.Scanner;
 
 import static java.lang.System.exit;
 
+/**Class that implements the command line terminal*/
 public class CMD
 {
-    /**CMD Inserted Character*/
+    /**Last inserted command*/
     private String Command;
 
-    /**CMD File Line Index*/
+    /**Current line index, if -1 the file cannot be opened*/
     private int LineIndex;
 
-    /**CMD File Lines Linked List*/
+    /**Linked List that contains the file lines*/
     private LinkedList<String> FileLines;
 
-    /**CMD Line Number Printing*/
+    /**Boolean flag, if true, the line numbers are printed*/
     private boolean mPrintLineNumbers = false;
 
-    /**CMD Input Filename*/
+    /**Filename of that file that will be opened*/
     private String Filename;
 
-    /**CMD No File Constructor*/
+    /**Default constructor when the file cannot be opened*/
     public CMD(String mFilename)
     {
+        //Set the line index to -1, if the file cannot be opened
         this.LineIndex = -1;
         this.FileLines = new LinkedList<>();
         this.Filename = mFilename;
     }
 
-    /**CMD Input File Constructor*/
+    /**Default constructor when the file can be opened*/
     public CMD(String mFilename, LinkedList<String> mFileLines)
     {
+        //Set the line index to the last line of the file
         this.LineIndex = mFileLines.size() - 1;
         this.FileLines = mFileLines;
         this.Filename = mFilename;
@@ -129,13 +132,13 @@ public class CMD
             //Print all lines
             if(this.Command.equals("l"))
             {
-                int mIndex = 0;
+                int index = 0;
                for(String mLine : this.FileLines)
                {
                    if(this.mPrintLineNumbers)
                    {
-                       System.out.println(mIndex + 1 + ")   " + mLine);
-                       mIndex++;
+                       System.out.println(index + 1 + ")   " + mLine);
+                       index++;
                    }
                    else
                    {
@@ -282,14 +285,14 @@ public class CMD
             {
                 ArrayList<String> mWordList = new ArrayList<>(this.FileLines);
                 ArrayList<Integer> mLineIndex = new ArrayList<>();
-                for(int mIndex = 0; mIndex < this.FileLines.size(); mIndex++)
+                for(int index = 0; index < this.FileLines.size(); index++)
                 {
-                    mLineIndex.add(mIndex + 1);
+                    mLineIndex.add(index + 1);
                 }
                 IndexingTable mIndexingTable = new IndexingTable(mWordList, mLineIndex, false);
-                for(int mIndex = 0; mIndex < mLineIndex.size(); mIndex++)
+                for(int index = 0; index < mLineIndex.size(); index++)
                 {
-                    System.out.println(mIndexingTable.getTupleVector().get(mIndex).getLeftValue() + " Line: " + mIndexingTable.getTupleVector().get(mIndex).getRightValue());
+                    System.out.println(mIndexingTable.getTupleVector().get(index).getLeftValue() + " Line: " + mIndexingTable.getTupleVector().get(index).getRightValue());
                 }
             }
 
@@ -353,139 +356,187 @@ public class CMD
         }
     }
 
-    /**Check whether the inserted character is valid*/
+    /**Method that checks whether the inserted character is valid*/
     protected boolean ValidateCommand()
     {
-        ArrayList<String> ValidCommands = new ArrayList<>();
-        ValidCommands.add("^");
-        ValidCommands.add("$");
-        ValidCommands.add("-");
-        ValidCommands.add("+");
-        ValidCommands.add("a");
-        ValidCommands.add("t");
-        ValidCommands.add("d");
-        ValidCommands.add("l");
-        ValidCommands.add("n");
-        ValidCommands.add("p");
-        ValidCommands.add("q");
-        ValidCommands.add("w");
-        ValidCommands.add("x");
-        ValidCommands.add("=");
-        ValidCommands.add("#");
-        ValidCommands.add("c");
-        ValidCommands.add("v");
-        ValidCommands.add("s");
-        ValidCommands.add("b");
-        return ValidCommands.contains(this.Command);
+        //Create a new ArrayList object and add the valid commands
+        ArrayList<String> validCommands = new ArrayList<>();
+        validCommands.add("^");
+        validCommands.add("$");
+        validCommands.add("-");
+        validCommands.add("+");
+        validCommands.add("a");
+        validCommands.add("t");
+        validCommands.add("d");
+        validCommands.add("l");
+        validCommands.add("n");
+        validCommands.add("p");
+        validCommands.add("q");
+        validCommands.add("w");
+        validCommands.add("x");
+        validCommands.add("=");
+        validCommands.add("#");
+        validCommands.add("c");
+        validCommands.add("v");
+        validCommands.add("s");
+        validCommands.add("b");
+        
+        //Check if the inserted command is valid
+        return validCommands.contains(this.Command);
     }
 
-    /**CMD Inserted String setter*/
+    /**Setter for the command property*/
     protected void setCommand(String command)
     {
         Command = command;
     }
 
-    /**Search byte page for the word*/
-    private int LinearSearchBytePage(String word, byte[] bytePage, ArrayList<Integer> matchingPositions)
+    /**Search byte page for the word, during linear search
+     * @param wordToBeSearched = word to be searched
+     * @param bytePage = data page in bytes
+     * @param matchingPositions  = ArrayList that contains the lines that the word to be searched is present
+     * @return true if the search must be continued, false if the word to be searched will not be found in the file*/
+    private boolean LinearSearchBytePage(String wordToBeSearched, byte[] bytePage, ArrayList<Integer> matchingPositions)
     {
-        if(word.length() > SizeConstants.getMaxWordSize() || word.length() < SizeConstants.getMinWordSize())
+        //If the wordToBeSearched's length is less than MinWordSize or greater than MaxWordSize, then the search fails automatically
+        if(wordToBeSearched.length() > SizeConstants.getMaxWordSize() || wordToBeSearched.length() < SizeConstants.getMinWordSize())
         {
-            return -1;
+            return false;
         }
 
-        int mRecordSize = (SizeConstants.getMaxWordSize() + 4);
+        //Get the index entry size in ASCII characters
+        int indexEntrySize = (SizeConstants.getMaxWordSize() + 4);
 
-        for(int mIndex = 0; mIndex < bytePage.length; mIndex = mIndex + mRecordSize)
+        //Search for every entry in the byte page
+        for(int index = 0; index < bytePage.length; index = index + indexEntrySize)
         {
-            String mWord = new String(Arrays.copyOfRange(bytePage, mIndex, mIndex + SizeConstants.getMaxWordSize())).replaceAll("\\s+","");
+            //Get only the word from the data page and convert the bytes to ASCII characters
+            String dataPageEntryWord = new String(Arrays.copyOfRange(bytePage, index, index + SizeConstants.getMaxWordSize())).replaceAll("\\s+","");
 
-            if(mWord.equals(word))
+            //Compare the index entry word and the word to be searched
+            if(dataPageEntryWord.equals(wordToBeSearched))
             {
-                matchingPositions.add(ByteBuffer.wrap(Arrays.copyOfRange(bytePage, mIndex + SizeConstants.getMaxWordSize(), mIndex + mRecordSize)).getInt());
+                //Get the line number from the index entry and add it to the ArrayList
+                matchingPositions.add(ByteBuffer.wrap(Arrays.copyOfRange(bytePage, index + SizeConstants.getMaxWordSize(), index + indexEntrySize)).getInt());
             }
         }
-        return  0;
+        return true;
     }
 
-    /**LinearReadIndexFile*/
-    private int LinearReadIndexFile(String filename, ArrayList<Integer> matchingPositions, String word)
+    /**Read the index file and execute linear search for the word to be searched
+     * @param filename = the index file filename
+     * @param matchingPositions = ArrayList that contains the lines that the word to be searched is present
+     * @param wordToBeSearched = word to be searched
+     * @return the number of data page accesses that were needed during the search, or 0 if the file cannot be opened*/
+    private int LinearReadIndexFile(String filename, ArrayList<Integer> matchingPositions, String wordToBeSearched)
     {
         try
-        {
-            File LocalInputFile = new File(filename + ".ndx");
-            Scanner LocalInputFileReader = new Scanner(LocalInputFile);
+        {        
+            //Try to open the index file using a Scanner
+            Scanner indexFileFileScanner = new Scanner(new File(filename + ".ndx"));
 
-            int mLineCounter = 0;
-            int mWordStatus = 0;
-            while(LocalInputFileReader.hasNext() && mWordStatus == 0)
+            //Counter for the data page accesses
+            int dataPageCounter = 0;
+            
+            //Flag for the search process status
+            boolean searchStatus = true;
+            
+            //If the word to be searched length is valid, scan every data page in the file
+            while(indexFileFileScanner.hasNext() && searchStatus)
             {
-                ByteBuffer mBytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(LocalInputFileReader.nextLine(), SizeConstants.getBufferSize()));
+                //Fetch the data page into the ByteBuffer
+                ByteBuffer bytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(indexFileFileScanner.nextLine(), SizeConstants.getBufferSize()));
 
-                mWordStatus = LinearSearchBytePage(word,mBytePageBuffer.array(), matchingPositions);
-                mLineCounter++;
+                //Search for the word to be searched in the data page
+                searchStatus = LinearSearchBytePage(wordToBeSearched,bytePageBuffer.array(), matchingPositions);
+
+                //Count the data page access
+                dataPageCounter++;
             }
-            LocalInputFileReader.close();
-            return mLineCounter;
+            
+            //Close the FileScanner
+            indexFileFileScanner.close();
+            
+            //Return the number of data page accesses
+            return dataPageCounter;
         }
         catch (FileNotFoundException e)
         {
+            //Catch the FileNotFoundException and inform the user
             System.out.println("File: " + this.Filename + " cannot be opened.");
             e.printStackTrace();
             return 0;
         }
     }
 
-    /**LinearReadIndexFile*/
-    private int BinaryReadIndexFile(String filename, ArrayList<Integer> matchingPositions, String word)
+    /**Read the index file and execute binary search for the word to be searched
+     * @param filename = the index file filename
+     * @param matchingPositions = ArrayList that contains the lines that the word to be searched is present
+     * @param wordToBeSearched = word to be searched
+     * @return the number of data page accesses that were needed during the search, or 0 if the file cannot be opened*/
+    private int BinaryReadIndexFile(String filename, ArrayList<Integer> matchingPositions, String wordToBeSearched)
     {
         try
         {
+            //Initialize the file object
             File LocalInputFile = new File(filename + ".ndx");
-            Scanner LocalInputFileReader = new Scanner(LocalInputFile);
 
-            //Get the files lines number.
+            //Try to open the index file using a Scanner
+            Scanner indexFileFileScanner = new Scanner(LocalInputFile);
+
+            //Get the files lines number
             int mMaxFileLines = 0;
-            while(LocalInputFileReader.hasNext())
+            while(indexFileFileScanner.hasNext())
             {
-                LocalInputFileReader.nextLine();
+                //Read every line in the file
+                indexFileFileScanner.nextLine();
                 mMaxFileLines++;
             }
 
-            int mBottomFileLines = 0;
-            int mTopFileLines = mMaxFileLines;
-            int mMiddlePoint;
-            int mDataPageAccessesCounter = 0;
-            int mWordStatus;
+            //Index to the bottom part of the search area of the file
+            int bottomAreaFileIndex = 0;
+            
+            //Index to the top part of the search area of the file
+            int topAreaFileIndex = mMaxFileLines;
 
-            while (mBottomFileLines <= mTopFileLines)
+            //Index to the middle line of the search area of the file
+            int middleFileLineIndex;
+            
+            //Counter for the data page accesses
+            int dataPageAccessesCounter = 0;
+            
+            //Status of the search process
+            int searchStatus;
+
+            while (bottomAreaFileIndex <= topAreaFileIndex)
             {
-                LocalInputFileReader = new Scanner(LocalInputFile);
-                mMiddlePoint = (mBottomFileLines + mTopFileLines)/2;
-                SkipLines(LocalInputFileReader, mMiddlePoint);
+                indexFileFileScanner = new Scanner(LocalInputFile);
+                middleFileLineIndex = (bottomAreaFileIndex + topAreaFileIndex)/2;
+                SkipLines(indexFileFileScanner, middleFileLineIndex);
 
-                ByteBuffer mBytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(LocalInputFileReader.nextLine(), SizeConstants.getBufferSize()));
+                ByteBuffer bytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(indexFileFileScanner.nextLine(), SizeConstants.getBufferSize()));
 
-                mWordStatus = BinarySearchBytePage(word,mBytePageBuffer.array(), matchingPositions);
-                mDataPageAccessesCounter++;
+                searchStatus = BinarySearchBytePage(wordToBeSearched,bytePageBuffer.array(), matchingPositions);
+                dataPageAccessesCounter++;
 
-                if (mWordStatus == 0 || mWordStatus == -1)
+                if (searchStatus == 0 || searchStatus == -1)
                 {
                     // found it
                     break;
                 }
-                else if (mWordStatus == 2)
+                else if (searchStatus == 2)
                 {
                     // line comes before searchValue
-                    mBottomFileLines = mMiddlePoint + 1;
+                    bottomAreaFileIndex = middleFileLineIndex + 1;
                 }
-                else if (mWordStatus == 1)
+                else if (searchStatus == 1)
                 {
                     // line comes after searchValue
-                    mTopFileLines = mMiddlePoint - 1;
+                    topAreaFileIndex = middleFileLineIndex - 1;
                 }
             }
-            LocalInputFileReader.close();
-            return mDataPageAccessesCounter;
+            indexFileFileScanner.close();
+            return dataPageAccessesCounter;
         }
         catch (FileNotFoundException e)
         {
@@ -500,9 +551,9 @@ public class CMD
         String[] mStringBytesArray = stringByteArray.split("[\\[ \\],]+");
         mStringBytesArray = Arrays.copyOfRange(mStringBytesArray, 1, mStringBytesArray.length);
         byte[] mByteArray = new byte[byteArraySize];
-        for(int mIndex = 0; mIndex < byteArraySize; mIndex++)
+        for(int index = 0; index < byteArraySize; index++)
         {
-            mByteArray[mIndex] = Byte.parseByte(mStringBytesArray[mIndex]);
+            mByteArray[index] = Byte.parseByte(mStringBytesArray[index]);
         }
         return mByteArray;
     }
@@ -518,48 +569,48 @@ public class CMD
         }
     }
 
-    private int BinarySearchBytePage(String word, byte[] bytePage, ArrayList<Integer> matchingPositions)
+    private int BinarySearchBytePage(String wordToBeSearched, byte[] bytePage, ArrayList<Integer> matchingPositions)
     {
-        if(word.length() > SizeConstants.getMaxWordSize() || word.length() < SizeConstants.getMinWordSize())
+        if(wordToBeSearched.length() > SizeConstants.getMaxWordSize() || wordToBeSearched.length() < SizeConstants.getMinWordSize())
         {
             return -1;
         }
 
-        int mRecordSize = (SizeConstants.getMaxWordSize() + 4);
-        String mWord = "";
+        int indexEntrySize = (SizeConstants.getMaxWordSize() + 4);
+        String dataPageEntryWord = "";
         String mLastNonBlankWord = "";
         boolean mFoundAtFirst = false;
         boolean mFoundAtLast = false;
 
-        for(int mIndex = 0; mIndex < bytePage.length; mIndex = mIndex + mRecordSize)
+        for(int index = 0; index < bytePage.length; index = index + indexEntrySize)
         {
-            mWord = new String(Arrays.copyOfRange(bytePage, mIndex, mIndex + SizeConstants.getMaxWordSize())).replaceAll("\\s+","");
-            if(mWord.equals(word))
+            dataPageEntryWord = new String(Arrays.copyOfRange(bytePage, index, index + SizeConstants.getMaxWordSize())).replaceAll("\\s+","");
+            if(dataPageEntryWord.equals(wordToBeSearched))
             {
-                matchingPositions.add(ByteBuffer.wrap(Arrays.copyOfRange(bytePage, mIndex + SizeConstants.getMaxWordSize(), mIndex + mRecordSize)).getInt());
-                if(mIndex == 0)
+                matchingPositions.add(ByteBuffer.wrap(Arrays.copyOfRange(bytePage, index + SizeConstants.getMaxWordSize(), index + indexEntrySize)).getInt());
+                if(index == 0)
                 {
                     mFoundAtFirst = true;
                 }
             }
-            if(!mWord.trim().isBlank())
+            if(!dataPageEntryWord.trim().isBlank())
             {
-                mLastNonBlankWord = mWord;
+                mLastNonBlankWord = dataPageEntryWord;
             }
         }
 
-        if(mWord.equals(word))
+        if(dataPageEntryWord.equals(wordToBeSearched))
         {
             mFoundAtLast = true;
         }
 
         if(matchingPositions.isEmpty())
         {
-            if(word.compareTo(mLastNonBlankWord) < 0)
+            if(wordToBeSearched.compareTo(mLastNonBlankWord) < 0)
             {
                 return 1;
             }
-            else if(word.compareTo(mLastNonBlankWord) > 0)
+            else if(wordToBeSearched.compareTo(mLastNonBlankWord) > 0)
             {
                 return 2;
             }
