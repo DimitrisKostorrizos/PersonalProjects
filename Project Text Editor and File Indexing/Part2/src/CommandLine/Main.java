@@ -23,19 +23,19 @@ public class Main
         //String InputFilename = args[0];
 
         String InputFilename = "test.txt";
-        boolean validFile;
+        boolean validFile = true;
 
         //Check if the file exists and can be opened
-        try
-        {
-            new Scanner(new File(InputFilename));
-            validFile = true;
-        }
-        catch (FileNotFoundException e)
-        {
-            validFile = false;
-            e.printStackTrace();
-        }
+//        try
+//        {
+//            new Scanner(new File(InputFilename));
+//            validFile = true;
+//        }
+//        catch (FileNotFoundException e)
+//        {
+//            validFile = false;
+//            e.printStackTrace();
+//        }
 
         //Initialise the Size Constants object
         new SizeConstants(128, 5, 20, 80);
@@ -46,7 +46,7 @@ public class Main
         //Create a CMD, a Command Line Terminal object
         CMD mCmd;
 
-        if(validFile)
+        if(!validFile)
         {
             /*Create an Instance of the CMD class*/
             mCmd = new CMD(InputFilename);

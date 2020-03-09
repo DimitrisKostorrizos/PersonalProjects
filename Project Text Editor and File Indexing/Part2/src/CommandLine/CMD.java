@@ -176,17 +176,17 @@ public class CMD
                 int index = 0;
 
                 //Iterate over the file lines
-                for(String mLine : this.FileLines)
+                for(String line : this.FileLines)
                 {
                     //If printing of the line number is enabled
                     if(this.mPrintLineNumbers)
                     {
-                        System.out.println(index + 1 + ")   " + mLine);
+                        System.out.println(index + 1 + ")   " + line);
                         index++;
                     }
                     else
                     {
-                        System.out.println(mLine);
+                        System.out.println(line);
                     }
                 }
             }
@@ -239,10 +239,10 @@ public class CMD
                     FileWriter LocalOutputFileWriter = new FileWriter(new File(this.Filename));
 
                     //Iterate over the file lines
-                    for(String mLine : this.FileLines)
+                    for(String line : this.FileLines)
                     {
                         //Write the line and a newline character
-                        LocalOutputFileWriter.write(mLine + "\n");
+                        LocalOutputFileWriter.write(line + "\n");
                     }
                     System.out.println("File was written successfully.");
 
@@ -266,10 +266,10 @@ public class CMD
                     FileWriter LocalOutputFileWriter = new FileWriter(new File(this.Filename));
 
                     //Iterate over the file lines
-                    for(String mLine : this.FileLines)
+                    for(String line : this.FileLines)
                     {
                         //Write the line and a newline character
-                        LocalOutputFileWriter.write(mLine + "\n");
+                        LocalOutputFileWriter.write(line + "\n");
                     }
                     System.out.println("Exiting with save.");
 
@@ -309,10 +309,10 @@ public class CMD
                 
                 //Sum all the characters
                 int totalLineCharacters = 0;
-                for(String mLine : this.FileLines)
+                for(String line : this.FileLines)
                 {
                     //Add the lines characters to total sum
-                    totalLineCharacters += mLine.length();
+                    totalLineCharacters += line.length();
                 }
                 System.out.println(mLines + " Lines, " + totalLineCharacters + " characters.");
             }
@@ -320,29 +320,51 @@ public class CMD
             //Create index file
             if(this.Command.equals("c"))
             {
-                ArrayList<String> mWordList = new ArrayList<>();
-                ArrayList<Integer> mLineIndex = new ArrayList<>();
-                int mLineCounter = 1;
-                for(String mLine : this.FileLines)
+                //Initialize an ArrayList for the file lines
+                ArrayList<String> wordList = new ArrayList<>();
+
+                //Initialize an ArrayList for the file line numbers
+                ArrayList<Integer> fileLineIndex = new ArrayList<>();
+                
+                //Initialize a file line counter
+                int lineCounter = 1;
+                
+                //Iterate over the file lines
+                for(String line : this.FileLines)
                 {
-                    String[] mSplitWords = mLine.split("[ ,.?!]+");
-                    for(String word:mSplitWords)
+                    //Split the words from each line
+                    String[] splitWords = line.split("[ ,.?!]+");
+                    
+                    //Iterate over the spliced words
+                    for(String word : splitWords)
                     {
+                        //If the spit word length is less than MinWordSize, ignore it
                         if(word.length() >= SizeConstants.getMinWordSize())
                         {
+                            //If the spit word length is greater than MaxWordSize, cut it to maximum size
                             if(word.length() > SizeConstants.getMaxWordSize())
                             {
                                 word = word.substring(0,SizeConstants.getMaxWordSize());
                             }
-                            mWordList.add(word);
-                            mLineIndex.add(mLineCounter);
+                            //Add the word to the array list
+                            wordList.add(word);
+
+                            //Add the word line number to the array list
+                            fileLineIndex.add(lineCounter);
                         }
                     }
-                    mLineCounter++;
+                    //Increase the line counter
+                    lineCounter++;
                 }
-                IndexFileBufferFileWriter mIndexTableFileWriter = new IndexFileBufferFileWriter(this.Filename);
-                IndexingTable mIndexingTable = new IndexingTable(mWordList, mLineIndex, true);
-                int mNumberOfPages = mIndexTableFileWriter.IndexingTableByteFileWrite(mIndexingTable);
+                
+                //Create a IndexFileBufferFileWriter, to create the index file
+                IndexFileBufferFileWriter indexTableFileWriter = new IndexFileBufferFileWriter(this.Filename);
+
+                //Create the sorted index table of the the file
+                IndexingTable indexingTable = new IndexingTable(wordList, fileLineIndex, true);
+
+                //Create the index file based on the index table and get the data page number
+                int mNumberOfPages = indexTableFileWriter.IndexingTableByteFileWrite(indexingTable);
                 System.out.print("Index file was created successfully.");
                 System.out.println("Data pages of size " + SizeConstants.getBufferSize() + " bytes: " + mNumberOfPages);
             }
@@ -350,16 +372,49 @@ public class CMD
             //Print index file
             if(this.Command.equals("v"))
             {
-                ArrayList<String> mWordList = new ArrayList<>(this.FileLines);
-                ArrayList<Integer> mLineIndex = new ArrayList<>();
-                for(int index = 0; index < this.FileLines.size(); index++)
+                //Initialize an ArrayList for the file lines
+                ArrayList<String> wordList = new ArrayList<>();
+
+                //Initialize an ArrayList for the file line numbers
+                ArrayList<Integer> fileLineIndex = new ArrayList<>();
+
+                //Initialize a file line counter
+                int lineCounter = 1;
+
+                //Iterate over the file lines
+                for(String line : this.FileLines)
                 {
-                    mLineIndex.add(index + 1);
+                    //Split the words from each line
+                    String[] splitWords = line.split("[ ,.?!]+");
+
+                    //Iterate over the spliced words
+                    for(String word : splitWords)
+                    {
+                        //If the spit word length is less than MinWordSize, ignore it
+                        if(word.length() >= SizeConstants.getMinWordSize())
+                        {
+                            //If the spit word length is greater than MaxWordSize, cut it to maximum size
+                            if(word.length() > SizeConstants.getMaxWordSize())
+                            {
+                                word = word.substring(0,SizeConstants.getMaxWordSize());
+                            }
+                            //Add the word to the array list
+                            wordList.add(word);
+
+                            //Add the word line number to the array list
+                            fileLineIndex.add(lineCounter);
+                        }
+                    }
+                    //Increase the line counter
+                    lineCounter++;
                 }
-                IndexingTable mIndexingTable = new IndexingTable(mWordList, mLineIndex, false);
-                for(int index = 0; index < mLineIndex.size(); index++)
+                //Create the unsorted index table of the the file
+                IndexingTable indexingTable = new IndexingTable(wordList, fileLineIndex, false);
+
+                //Iterate over the indexing table tuples
+                for(int index = 0; index < fileLineIndex.size(); index++)
                 {
-                    System.out.println(mIndexingTable.getTupleVector().get(index).getLeftValue() + " Line: " + mIndexingTable.getTupleVector().get(index).getRightValue());
+                    System.out.println(indexingTable.getTupleVector().get(index).getLeftValue() + " Line: " + indexingTable.getTupleVector().get(index).getRightValue());
                 }
             }
 
@@ -372,7 +427,7 @@ public class CMD
 
                 ArrayList<Integer> mMatchingPositions = new ArrayList<>();
 
-                int mLineCounter = LinearReadIndexFile(this.Filename, mMatchingPositions, mInputWord);
+                int lineCounter = LinearReadIndexFile(this.Filename, mMatchingPositions, mInputWord);
 
                 if(mMatchingPositions.isEmpty())
                 {
@@ -387,7 +442,7 @@ public class CMD
                     }
                     System.out.println(".");
                 }
-                System.out.println("Disk Accesses: " + mLineCounter);
+                System.out.println("Disk Accesses: " + lineCounter);
             }
 
             //Print lines of word binary search.
@@ -399,7 +454,7 @@ public class CMD
 
                 ArrayList<Integer> mMatchingPositions = new ArrayList<>();
 
-                int mLineCounter = BinaryReadIndexFile(this.Filename, mMatchingPositions, mInputWord);
+                int lineCounter = BinaryReadIndexFile(this.Filename, mMatchingPositions, mInputWord);
 
                 if(mMatchingPositions.isEmpty())
                 {
@@ -414,7 +469,7 @@ public class CMD
                     }
                     System.out.println(".");
                 }
-                System.out.println("Disk Accesses: " + mLineCounter);
+                System.out.println("Disk Accesses: " + lineCounter);
             }
         }
         else
