@@ -45,42 +45,48 @@ public class CMD
         this.Filename = mFilename;
     }
 
-    /**CMD Execute Command Method*/
+    /**Method that executes the inserted command*/
     protected void ExecuteCommand()
     {
+        //Check if the inserted command is valid
         if(this.ValidateCommand())
         {
-            //Set Line Pointer to First Line
+            //Set line index to first fine
             if(this.Command.equals("^"))
             {
+                //-1 if the Linked List is empty, 0 if at least one line exists
                 this.LineIndex = this.FileLines.isEmpty()? -1: 0;
                 System.out.println("Pointer set to first line.");
             }
 
-            //Set Line Pointer to Last Line
+            //Set line index to last line
             if(this.Command.equals("$"))
             {
+                //-1 if the Linked List is empty, size - 1 if at least one line exists
                 this.LineIndex = this.FileLines.isEmpty()? -1: this.FileLines.size() - 1;
                 System.out.println("Pointer set to last line.");
             }
 
-            //Set Line Pointer to Previous Position
+            //Set line index to previous position
             if(this.Command.equals("-"))
             {
+                //Check whether the Linked List is empty
                 if(this.FileLines.isEmpty())
                 {
                     this.LineIndex = -1;
                 }
                 else
                 {
+                    //0 if the line index is already at the first line, else decrease it
                     this.LineIndex = this.LineIndex == 0? 0: this.LineIndex - 1;
                 }
                 System.out.println("Pointer set to previous line.");
             }
 
-            //Set Line Pointer to Next Position
+            //Set line index to next position
             if(this.Command.equals("+"))
             {
+                //size - 1 if the line index is already at the last line, else increase it
                 this.LineIndex = (this.FileLines.size() - 1) == this.LineIndex ? this.LineIndex: this.LineIndex + 1;
                 System.out.println("Pointer set to next line.");
             }
@@ -89,9 +95,23 @@ public class CMD
             if(this.Command.equals("a"))
             {
                 System.out.println("Type the text for the new line:");
+                
+                //Initialize a Scanner object to read for the command line
                 Scanner CMDCurrentLineScanner = new Scanner(System.in);
-                String mInputLine = CMDCurrentLineScanner.nextLine();
-                this.FileLines.add(this.LineIndex + 1, mInputLine);
+
+                //Read the entered line
+                String inputLine = CMDCurrentLineScanner.nextLine();
+
+                //Check if the inserted line length is greater than the MaxFileLineSize
+                if(inputLine.length() > SizeConstants.getMaxFileLineSize())
+                {
+                    //Cut the inserted line to the maximum size
+                    inputLine = inputLine.substring(0, SizeConstants.getMaxFileLineSize());
+                    System.out.println("The inserted line is too big. Only a portion of it will be inserted");
+                }
+                this.FileLines.add(this.LineIndex + 1, inputLine);
+                
+                //Set the line index to the new line
                 this.LineIndex++;
                 System.out.println("New line entered successfully.");
             }
@@ -100,15 +120,31 @@ public class CMD
             if(this.Command.equals("t"))
             {
                 System.out.println("Type the text for the new line:");
+
+                //Initialize a Scanner object to read for the command line
                 Scanner CMDCurrentLineScanner = new Scanner(System.in);
-                String mInputLine = CMDCurrentLineScanner.nextLine();
+
+                //Read the entered line
+                String inputLine = CMDCurrentLineScanner.nextLine();
+
+                //Check if the inserted line length is greater than the MaxFileLineSize
+                if(inputLine.length() > SizeConstants.getMaxFileLineSize())
+                {
+                    //Cut the inserted line to the maximum size
+                    inputLine = inputLine.substring(0, SizeConstants.getMaxFileLineSize());
+                    System.out.println("The inserted line is too big. Only a portion of it will be inserted");
+                }
+
+                //Check whether the Linked List is empty
                 if(this.FileLines.isEmpty())
                 {
-                    this.FileLines.add(mInputLine);
+                    //Add the inserted line at the first position
+                    this.FileLines.add(inputLine);
                 }
                 else
                 {
-                    this.FileLines.add(this.LineIndex, mInputLine);
+                    //Add the inserted line at the current position, and shift the current line to next position
+                    this.FileLines.add(this.LineIndex, inputLine);
                 }
                 System.out.println("New line entered successfully.");
             }
@@ -116,6 +152,7 @@ public class CMD
             //Delete current line
             if(this.Command.equals("d"))
             {
+                //Check whether the Linked List is empty
                 if(this.FileLines.isEmpty())
                 {
                     this.LineIndex = -1;
@@ -123,7 +160,10 @@ public class CMD
                 }
                 else
                 {
+                    //Delete the current line
                     this.FileLines.remove(this.LineIndex);
+
+                    //Set the line index
                     this.LineIndex = this.LineIndex == 0? 0: this.LineIndex - 1;
                     System.out.println("Current line deleted successfully.");
                 }
@@ -132,31 +172,38 @@ public class CMD
             //Print all lines
             if(this.Command.equals("l"))
             {
+                //Line number index
                 int index = 0;
-               for(String mLine : this.FileLines)
-               {
-                   if(this.mPrintLineNumbers)
-                   {
-                       System.out.println(index + 1 + ")   " + mLine);
-                       index++;
-                   }
-                   else
-                   {
-                       System.out.println(mLine);
-                   }
-               }
+
+                //Iterate over the file lines
+                for(String mLine : this.FileLines)
+                {
+                    //If printing of the line number is enabled
+                    if(this.mPrintLineNumbers)
+                    {
+                        System.out.println(index + 1 + ")   " + mLine);
+                        index++;
+                    }
+                    else
+                    {
+                        System.out.println(mLine);
+                    }
+                }
             }
 
             //Toggle whether line numbers are displayed when printing all lines
             if(this.Command.equals("n"))
             {
+                //If printing of the line number is enabled
                 if(this.mPrintLineNumbers)
                 {
+                    //Disable the line number printing
                     this.mPrintLineNumbers = false;
                     System.out.println("Line numbers won't be displayed when printing all lines.");
                 }
                 else
                 {
+                    //Enable the line number printing
                     this.mPrintLineNumbers = true;
                     System.out.println("Line numbers will be displayed when printing all lines.");
                 }
@@ -165,6 +212,7 @@ public class CMD
             //Print current line
             if(this.Command.equals("p"))
             {
+                //Check whether the Linked List is empty
                 if(this.FileLines.isEmpty())
                 {
                     System.out.println("No line to print.");
@@ -585,74 +633,112 @@ public class CMD
         return byteArray;
     }
 
-    public static void SkipLines(Scanner s,int lineNum)
+    /**Method that skips lines from a FileScanner object
+     * @param fileScanner = File Scanner object
+     * @param lineNumber = Number of lines to be skipped*/
+    public static void SkipLines(Scanner fileScanner,int lineNumber)
     {
-        for(int index = 0; index < lineNum;index++)
+        for(int index = 0; index < lineNumber;index++)
         {
-            if(s.hasNextLine())
+            if(fileScanner.hasNextLine())
             {
-                s.nextLine();
+                //Skip the line
+                fileScanner.nextLine();
             }
         }
     }
 
+    /**Search byte page for the word, during binary search
+     * @param wordToBeSearched = word to be searched
+     * @param bytePage = data page in bytes
+     * @param matchingPositions  = ArrayList that contains the lines that the word to be searched is present
+     * @return true if the search must be continued, false if the word to be searched will not be found in the file*/
     private int BinarySearchBytePage(String wordToBeSearched, byte[] bytePage, ArrayList<Integer> matchingPositions)
     {
+        //If the wordToBeSearched's length is less than MinWordSize or greater than MaxWordSize, then the search fails automatically
         if(wordToBeSearched.length() > SizeConstants.getMaxWordSize() || wordToBeSearched.length() < SizeConstants.getMinWordSize())
         {
             return -1;
         }
 
+        //Get the index entry size in ASCII characters
         int indexEntrySize = (SizeConstants.getMaxWordSize() + 4);
-        String dataPageEntryWord = "";
-        String mLastNonBlankWord = "";
-        boolean mFoundAtFirst = false;
-        boolean mFoundAtLast = false;
 
+        //Initialize the String representation of the word in the data page entry
+        String dataPageEntryWord = "";
+
+        //Initialize the String representation of the last non blank(space filled) word in the page
+        String lastNonBlankWord = "";
+
+        //Flag, true if the word to be searched is matched to the first entry of the data page
+        boolean foundAtFirstEntry = false;
+
+        //Flag, true if the word to be searched is matched to the first entry of the data page
+        boolean foundAtLastEntry = false;
+
+        //Search for every entry in the byte page
         for(int index = 0; index < bytePage.length; index = index + indexEntrySize)
         {
+            //Get only the word from the data page and convert the bytes to ASCII characters
             dataPageEntryWord = new String(Arrays.copyOfRange(bytePage, index, index + SizeConstants.getMaxWordSize())).replaceAll("\\s+","");
+
+            //Compare the index entry word and the word to be searched
             if(dataPageEntryWord.equals(wordToBeSearched))
             {
+                //Get the line number from the index entry and add it to the ArrayList
                 matchingPositions.add(ByteBuffer.wrap(Arrays.copyOfRange(bytePage, index + SizeConstants.getMaxWordSize(), index + indexEntrySize)).getInt());
                 if(index == 0)
                 {
-                    mFoundAtFirst = true;
+                    //Mark that the word to be searched is matched to the first entry of the data page
+                    foundAtFirstEntry = true;
                 }
             }
+
+            //Check if the word in the data page entry is not blank
             if(!dataPageEntryWord.trim().isBlank())
             {
-                mLastNonBlankWord = dataPageEntryWord;
+                //Store the last non blank data page entry word
+                lastNonBlankWord = dataPageEntryWord;
             }
         }
 
+        //Compare the last index entry word and the word to be searched
         if(dataPageEntryWord.equals(wordToBeSearched))
         {
-            mFoundAtLast = true;
+            //Mark that the word to be searched is matched to the last entry of the data page
+            foundAtLastEntry = true;
         }
 
+        //If the ArrayList is empty, the word to be searched wasn't found in the data page
         if(matchingPositions.isEmpty())
         {
-            if(wordToBeSearched.compareTo(mLastNonBlankWord) < 0)
+            //Check if the word to be searched is alphabetically before or after the last non blank word
+            if(wordToBeSearched.compareTo(lastNonBlankWord) < 0)
             {
+                //Search the bottom part of the search area
                 return 1;
             }
-            else if(wordToBeSearched.compareTo(mLastNonBlankWord) > 0)
+            else if(wordToBeSearched.compareTo(lastNonBlankWord) > 0)
             {
+                //Search the top part of the search area
                 return 2;
             }
         }
         else
         {
-            if(mFoundAtFirst)
+            //Search for other occurrences of the word to be searched
+            if(foundAtFirstEntry)
             {
+                //Search the bottom part of the search area
                 return 1;
             }
-            else if(mFoundAtLast)
+            else if(foundAtLastEntry)
             {
+                //Search the top part of the search area
                 return 2;
             }
         }
+        //Continue the binary search normally
         return  0;
     }
 }
