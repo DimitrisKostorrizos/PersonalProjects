@@ -494,13 +494,13 @@ public class CMD
             }
 
             //Index to the bottom part of the search area of the file
-            int bottomAreaFileIndex = 0;
+            int bottomFilePageIndex = 0;
             
             //Index to the top part of the search area of the file
-            int topAreaFileIndex = mMaxFileLines;
+            int topFilePageIndex = mMaxFileLines;
 
-            //Index to the middle line of the search area of the file
-            int middleFileLineIndex;
+            //Index to the middle data page of the search area of the file
+            int middleFilePageIndex;
             
             //Counter for the data page accesses
             int dataPageAccessesCounter = 0;
@@ -508,38 +508,53 @@ public class CMD
             //Status of the search process
             int searchStatus;
 
-            while (bottomAreaFileIndex <= topAreaFileIndex)
+            //Search while there are data pages to access, if topFilePageIndex is greater than bottomFilePageIndex, the search fails automatically
+            while (bottomFilePageIndex <= topFilePageIndex)
             {
+                //Reinitialize the FileScanner object
                 indexFileFileScanner = new Scanner(LocalInputFile);
-                middleFileLineIndex = (bottomAreaFileIndex + topAreaFileIndex)/2;
-                SkipLines(indexFileFileScanner, middleFileLineIndex);
+                
+                //Find the middle data page index
+                middleFilePageIndex = (bottomFilePageIndex + topFilePageIndex)/2;
 
+                //Skip the lines until the middle point
+                SkipLines(indexFileFileScanner, middleFilePageIndex);
+
+                //Fetch the data page from the file
                 ByteBuffer bytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(indexFileFileScanner.nextLine(), SizeConstants.getBufferSize()));
 
+                //Execute the binary search in the page
                 searchStatus = BinarySearchBytePage(wordToBeSearched,bytePageBuffer.array(), matchingPositions);
+
+                //Count the data page access
                 dataPageAccessesCounter++;
 
+                //If the word's to be searched length is invalid or the word is found in the page, but is neither the first or the last word in the page
                 if (searchStatus == 0 || searchStatus == -1)
                 {
-                    // found it
+                    //Complete the binary search
                     break;
                 }
                 else if (searchStatus == 2)
                 {
-                    // line comes before searchValue
-                    bottomAreaFileIndex = middleFileLineIndex + 1;
+                    //If the search must be continued in the top part of the search area of the file
+                    bottomFilePageIndex = middleFilePageIndex + 1;
                 }
                 else if (searchStatus == 1)
                 {
-                    // line comes after searchValue
-                    topAreaFileIndex = middleFileLineIndex - 1;
+                    //If the search must be continued in the bottom part of the search area of the file
+                    topFilePageIndex = middleFilePageIndex - 1;
                 }
             }
+            //Close the FileScanner object
             indexFileFileScanner.close();
+
+            //Return the number of the data page file accesses
             return dataPageAccessesCounter;
         }
         catch (FileNotFoundException e)
         {
+            //Catch the FileNotFoundException and inform the user
             System.out.println("File: " + this.Filename + " cannot be opened.");
             e.printStackTrace();
             return 0;
