@@ -561,16 +561,28 @@ public class CMD
         }
     }
 
+    /**Convert a string data page from the index file to a byte array
+     * @param stringByteArray = String that contains the data page
+     * @param byteArraySize = Data page size in bytes
+     * @return the byte array representation of the data page*/
     private byte[] StringToByteArrayTranslator(String stringByteArray, int byteArraySize)
     {
-        String[] mStringBytesArray = stringByteArray.split("[\\[ \\],]+");
-        mStringBytesArray = Arrays.copyOfRange(mStringBytesArray, 1, mStringBytesArray.length);
-        byte[] mByteArray = new byte[byteArraySize];
+        //Remove the characters:[],space for the byte array string
+        String[] stringDataPageBytes = stringByteArray.split("[\\[ \\],]+");
+        
+        //Get only the bytes from the data page string
+        stringDataPageBytes = Arrays.copyOfRange(stringDataPageBytes, 1, stringDataPageBytes.length);
+        
+        //Create an empty byte array
+        byte[] byteArray = new byte[byteArraySize];
         for(int index = 0; index < byteArraySize; index++)
         {
-            mByteArray[index] = Byte.parseByte(mStringBytesArray[index]);
+            //Parse the string byte to byte and add it to byte array
+            byteArray[index] = Byte.parseByte(stringDataPageBytes[index]);
         }
-        return mByteArray;
+        
+        //Return the byte array
+        return byteArray;
     }
 
     public static void SkipLines(Scanner s,int lineNum)
