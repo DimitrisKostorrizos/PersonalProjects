@@ -20,6 +20,9 @@
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+  </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\jimak\Desktop\Project Java\Part2" />
@@ -43,53 +46,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
-      <module name="CommandLine" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
-      <module name="CommandLine" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <option name="filePath" />
-      <option name="vmParameters" />
-      <option name="alternativeJrePath" />
-      <option name="programParameters" />
-      <option name="passParentEnvs" value="true" />
-      <option name="workingDirectory" />
-      <option name="isAlternativeJrePathEnabled" value="false" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="WORKING_DIRECTORY" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
   </component>
   <component name="ServiceViewManager">
     <option name="viewStates">
@@ -108,18 +64,18 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="413" y="119" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1583260986128" />
-    <state x="154" y="38" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583775172188">
+    <state x="154" y="38" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583777150391">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="154" y="38" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1583775172188" />
+    <state x="154" y="38" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1583777150391" />
     <state x="438" y="167" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1582799583843">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="438" y="167" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1582799583843" />
-    <state x="0" y="138" key="#com.intellij.ide.macro.MacrosDialog" timestamp="1583775156584">
+    <state x="0" y="138" key="#com.intellij.ide.macro.MacrosDialog" timestamp="1583777104745">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="0" y="138" key="#com.intellij.ide.macro.MacrosDialog/0.0.1366.728@0.0.1366.728" timestamp="1583775156584" />
+    <state x="0" y="138" key="#com.intellij.ide.macro.MacrosDialog/0.0.1366.728@0.0.1366.728" timestamp="1583777104745" />
     <state x="488" y="65" key="#com.intellij.ide.util.MemberChooser" timestamp="1583246241041">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -140,22 +96,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="445" height="438" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1582748658654" />
-    <state width="1345" height="223" key="GridCell.Tab.0.bottom" timestamp="1583775285091">
+    <state width="1345" height="179" key="GridCell.Tab.0.bottom" timestamp="1583777210836">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="223" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583775285091" />
-    <state width="1345" height="223" key="GridCell.Tab.0.center" timestamp="1583775285090">
+    <state width="1345" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583777210836" />
+    <state width="1345" height="179" key="GridCell.Tab.0.center" timestamp="1583777210836">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="223" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583775285090" />
-    <state width="1345" height="223" key="GridCell.Tab.0.left" timestamp="1583775285090">
+    <state width="1345" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583777210836" />
+    <state width="1345" height="179" key="GridCell.Tab.0.left" timestamp="1583777210835">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="223" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583775285090" />
-    <state width="1345" height="223" key="GridCell.Tab.0.right" timestamp="1583775285091">
+    <state width="1345" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583777210835" />
+    <state width="1345" height="179" key="GridCell.Tab.0.right" timestamp="1583777210836">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="223" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583775285091" />
+    <state width="1345" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583777210836" />
     <state width="1345" height="223" key="GridCell.Tab.1.bottom" timestamp="1583775285091">
       <screen x="0" y="0" width="1366" height="728" />
     </state>

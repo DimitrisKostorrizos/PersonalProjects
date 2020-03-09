@@ -15,7 +15,7 @@ public class Main
         //Check there is only one argument
         if(args.length != 1)
         {
-            System.out.println("Enter only a txt filename to continue.");
+            System.out.println("Enter only one txt filename to continue.");
             exit(0);
         }
 
