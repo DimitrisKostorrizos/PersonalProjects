@@ -235,17 +235,23 @@ public class CMD
             {
                 try
                 {
-                    File LocalOutputFile = new File(this.Filename);
-                    FileWriter LocalOutputFileWriter = new FileWriter(LocalOutputFile);
+                    //Try to open the txt file
+                    FileWriter LocalOutputFileWriter = new FileWriter(new File(this.Filename));
+
+                    //Iterate over the file lines
                     for(String mLine : this.FileLines)
                     {
+                        //Write the line and a newline character
                         LocalOutputFileWriter.write(mLine + "\n");
                     }
                     System.out.println("File was written successfully.");
+
+                    //Close the FileWriter object
                     LocalOutputFileWriter.close();
                 }
                 catch (IOException e)
                 {
+                    //Catch the IOException and inform the user
                     System.out.println("File: " + this.Filename + " cannot be opened.");
                     e.printStackTrace();
                 }
@@ -256,18 +262,26 @@ public class CMD
             {
                 try
                 {
-                    File LocalOutputFile = new File(this.Filename);
-                    FileWriter LocalOutputFileWriter = new FileWriter(LocalOutputFile);
+                    //Try to open the txt file
+                    FileWriter LocalOutputFileWriter = new FileWriter(new File(this.Filename));
+
+                    //Iterate over the file lines
                     for(String mLine : this.FileLines)
                     {
+                        //Write the line and a newline character
                         LocalOutputFileWriter.write(mLine + "\n");
                     }
                     System.out.println("Exiting with save.");
+
+                    //Close the FileWriter object
                     LocalOutputFileWriter.close();
+
+                    //Exit from the program
                     exit(0);
                 }
                 catch (IOException e)
                 {
+                    //Catch the IOException and inform the user
                     System.out.println("File: " + this.Filename + " cannot be opened.");
                     e.printStackTrace();
                 }
@@ -276,6 +290,7 @@ public class CMD
             //Print current line number
             if(this.Command.equals("="))
             {
+                //Check whether the Linked List is empty
                 if(this.FileLines.isEmpty())
                 {
                     System.out.println("Current line number: 0");
@@ -289,13 +304,17 @@ public class CMD
             //Print number of lines and characters
             if(this.Command.equals("#"))
             {
+                //Get the current line character length
                 int mLines = this.FileLines.size();
-                int mCharacters = 0;
+                
+                //Sum all the characters
+                int totalLineCharacters = 0;
                 for(String mLine : this.FileLines)
                 {
-                    mCharacters += mLine.length();
+                    //Add the lines characters to total sum
+                    totalLineCharacters += mLine.length();
                 }
-                System.out.println(mLines + " Lines, " + mCharacters + " characters.");
+                System.out.println(mLines + " Lines, " + totalLineCharacters + " characters.");
             }
 
             //Create index file
