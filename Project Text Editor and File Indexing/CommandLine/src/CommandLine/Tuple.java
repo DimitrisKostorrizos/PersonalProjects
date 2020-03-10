@@ -1,12 +1,12 @@
 package CommandLine;
 
-/**A pair that contains a string(Left) and Integer(Right) value named Tuple*/
+/**A pair that contains a string and Integer value named Tuple*/
 public class Tuple implements Comparable<Tuple>
 {
-    /**Left string value of the tuple*/
+    /**String value of the tuple*/
     private String Key;
 
-    /**Right integer value of the tuple*/
+    /**Integer value of the tuple*/
     private Integer Value;
 
     /**Default tuple constructor
