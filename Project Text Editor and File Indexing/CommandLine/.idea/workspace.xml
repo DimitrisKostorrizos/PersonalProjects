@@ -80,6 +80,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="488" y="65" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1583246241041" />
+    <state x="413" y="140" key="#com.intellij.ide.util.PackageChooserDialog" timestamp="1583860905675">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="413" y="140" key="#com.intellij.ide.util.PackageChooserDialog/0.0.1366.728@0.0.1366.728" timestamp="1583860905675" />
     <state x="412" y="148" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1582731974390">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -92,6 +96,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="363" y="92" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1366.728@0.0.1366.728" timestamp="1583756080120" />
+    <state x="479" y="270" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages" timestamp="1583860915532">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="479" y="270" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages/0.0.1366.728@0.0.1366.728" timestamp="1583860915532" />
     <state width="445" height="438" key="DebuggerActiveHint" timestamp="1582748658654">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
