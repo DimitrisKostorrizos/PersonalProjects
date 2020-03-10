@@ -333,7 +333,7 @@ public class CMD
                 for(String line : this.FileLines)
                 {
                     //Split the words from each line
-                    String[] splitWords = line.split("[ ,.?!]+");
+                    String[] splitWords = line.split("-|[ ,.?!]+");
                     
                     //Iterate over the spliced words
                     for(String word : splitWords)
@@ -385,7 +385,7 @@ public class CMD
                 for(String line : this.FileLines)
                 {
                     //Split the words from each line
-                    String[] splitWords = line.split("[ ,.?!]+");
+                    String[] splitWords = line.split("-|[ ,.?!]+");
 
                     //Iterate over the spliced words
                     for(String word : splitWords)
@@ -585,6 +585,9 @@ public class CMD
             
             //Flag for the search process status
             boolean searchStatus = true;
+
+            //
+            int wordOccurrences = matchingPositions.size();
             
             //If the word to be searched length is valid, scan every data page in the file
             while(indexFileFileScanner.hasNext() && searchStatus)
@@ -597,6 +600,21 @@ public class CMD
 
                 //Count the data page access
                 dataPageCounter++;
+
+                //Check if there no more occurrences of the word to be searched
+                if(!matchingPositions.isEmpty())
+                {
+                    //If there are continue the search
+                    if(wordOccurrences != matchingPositions.size())
+                    {
+                        wordOccurrences = matchingPositions.size();
+                    }
+                    else
+                    {
+                        //Stop the search
+                        searchStatus = false;
+                    }
+                }
             }
             
             //Close the FileScanner
