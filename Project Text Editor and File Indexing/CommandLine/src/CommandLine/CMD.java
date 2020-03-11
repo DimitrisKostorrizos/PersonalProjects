@@ -3,6 +3,7 @@ package CommandLine;
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.lang.System.exit;
 
@@ -484,8 +485,11 @@ public class CMD
                     //Sort the lines occurrences list
                     Collections.sort(matchingPositions);
 
+                    //Remove duplicate entries
+                    List<Integer> uniqueMatchingPositions = matchingPositions.stream().distinct().collect(Collectors.toList());
+
                     //Iterate over the lines that the word to be searched was found
-                    for(Integer position :  matchingPositions)
+                    for(Integer position :  uniqueMatchingPositions)
                     {
                         System.out.print(position + ",");
                     }

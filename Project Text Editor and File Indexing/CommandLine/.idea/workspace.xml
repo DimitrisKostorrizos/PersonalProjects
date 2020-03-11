@@ -32,7 +32,7 @@
     <configuration name="Main" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="CommandLine.Main" />
       <module name="CommandLine" />
-      <option name="PROGRAM_PARAMETERS" value="testfile_x10.txt" />
+      <option name="PROGRAM_PARAMETERS" value="testfile_x2.txt" />
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <RunnerSettings RunnerId="Run" />
       <ConfigurationWrapper RunnerId="Run" />
@@ -64,10 +64,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="413" y="119" key="#com.intellij.codeInsight.editorActions.RestoreReferencesDialog/0.0.1366.728@0.0.1366.728" timestamp="1583260986128" />
-    <state x="154" y="38" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583912219071">
+    <state x="154" y="38" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1583922337679">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="154" y="38" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1583912219071" />
+    <state x="154" y="38" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1583922337679" />
     <state x="438" y="167" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1582799583843">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -104,22 +104,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="445" height="438" key="DebuggerActiveHint/0.0.1366.728@0.0.1366.728" timestamp="1582748658654" />
-    <state width="1345" height="179" key="GridCell.Tab.0.bottom" timestamp="1583922010966">
+    <state width="1345" height="179" key="GridCell.Tab.0.bottom" timestamp="1583922339535">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583922010966" />
-    <state width="1345" height="179" key="GridCell.Tab.0.center" timestamp="1583922010966">
+    <state width="1345" height="179" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1583922339535" />
+    <state width="1345" height="179" key="GridCell.Tab.0.center" timestamp="1583922339534">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583922010966" />
-    <state width="1345" height="179" key="GridCell.Tab.0.left" timestamp="1583922010966">
+    <state width="1345" height="179" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1583922339534" />
+    <state width="1345" height="179" key="GridCell.Tab.0.left" timestamp="1583922339534">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583922010966" />
-    <state width="1345" height="179" key="GridCell.Tab.0.right" timestamp="1583922010966">
+    <state width="1345" height="179" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1583922339534" />
+    <state width="1345" height="179" key="GridCell.Tab.0.right" timestamp="1583922339535">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1345" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583922010966" />
+    <state width="1345" height="179" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1583922339535" />
     <state width="1345" height="223" key="GridCell.Tab.1.bottom" timestamp="1583775285091">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
