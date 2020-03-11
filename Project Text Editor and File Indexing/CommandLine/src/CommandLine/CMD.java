@@ -2,10 +2,7 @@ package CommandLine;
 
 import java.io.*;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
 
 import static java.lang.System.exit;
 
@@ -483,6 +480,9 @@ public class CMD
                 {
                     //If the word exists in the index file
                     System.out.print("The word: " + inputWord + " has been found on lines: ");
+
+                    //Sort the lines occurrences list
+                    Collections.sort(matchingPositions);
 
                     //Iterate over the lines that the word to be searched was found
                     for(Integer position :  matchingPositions)
