@@ -687,7 +687,7 @@ public class CMD
                 ByteBuffer bytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(indexFileFileScanner.nextLine(), SizeConstants.getBufferSize()));
 
                 //Execute the binary search in the page
-                searchStatus = BinarySearchBytePage(wordToBeSearched,bytePageBuffer.array(), matchingPositions);
+                searchStatus = BinarySearchBytePage(wordToBeSearched,bytePageBuffer.array(), matchingPositions, filename, middleFilePageIndex);
 
                 //Count the data page access
                 dataPageAccessesCounter++;
@@ -707,6 +707,14 @@ public class CMD
                 {
                     //If the search must be continued in the bottom part of the search area of the file
                     topFilePageIndex = middleFilePageIndex - 1;
+                }
+                else
+                {
+                    //Add the new data page accesses
+                    dataPageAccessesCounter += searchStatus;
+
+                    //Complete the binary search
+                    break;
                 }
             }
             //Close the FileScanner object
@@ -767,8 +775,10 @@ public class CMD
      * @param wordToBeSearched = word to be searched
      * @param bytePage = data page in bytes
      * @param matchingPositions  = ArrayList that contains the lines that the word to be searched is present
+     * @param filename = the index file name
+     * @param middleLine = the middle line of the last loop
      * @return true if the search must be continued, false if the word to be searched will not be found in the file*/
-    private int BinarySearchBytePage(String wordToBeSearched, byte[] bytePage, ArrayList<Integer> matchingPositions)
+    private int BinarySearchBytePage(String wordToBeSearched, byte[] bytePage, ArrayList<Integer> matchingPositions, String filename, int middleLine)
     {
         //If the wordToBeSearched's length is less than MinWordSize or greater than MaxWordSize, then the search fails automatically
         if(wordToBeSearched.length() > SizeConstants.getMaxWordSize() || wordToBeSearched.length() < SizeConstants.getMinWordSize())
@@ -841,19 +851,133 @@ public class CMD
         }
         else
         {
-            //Search for other occurrences of the word to be searched
+            //Search for other occurrences of the word to be searched in the bottom part
             if(foundAtFirstEntry)
             {
                 //Search the bottom part of the search area
-                return 1;
+                return LinearSearchAfterBinary(filename, matchingPositions, wordToBeSearched, middleLine, true);
             }
-            else if(foundAtLastEntry)
+
+            //Search for other occurrences of the word to be searched, in the top part
+            if(foundAtLastEntry)
             {
                 //Search the top part of the search area
-                return 2;
+                return LinearSearchAfterBinary(filename, matchingPositions, wordToBeSearched, middleLine, false);
             }
         }
         //Continue the binary search normally
         return  0;
+    }
+
+    /**Read the index file and execute linear search for the word to be searched
+     * @param filename = the index file filename
+     * @param matchingPositions = ArrayList that contains the lines that the word to be searched is present
+     * @param wordToBeSearched = word to be searched
+     * @param linesToSkip  = lines to skip depending on the part to search
+     * @param reverseFile = true to search the bottom part, false to search the top part
+     * @return the number of data page accesses that were needed during the search, or 0 if the file cannot be opened*/
+    private int LinearSearchAfterBinary(String filename, ArrayList<Integer> matchingPositions, String wordToBeSearched, int linesToSkip, boolean reverseFile)
+    {
+        try
+        {
+            //Try to open the index file using a Scanner
+            Scanner indexFileFileScanner = new Scanner(new File(filename + ".ndx"));
+
+            //Counter for the data page accesses
+            int dataPageCounter = 0;
+
+            //Flag for the search process status
+            boolean searchStatus = true;
+
+            //Counter of the word matching
+            int wordOccurrences = matchingPositions.size();
+
+            //Check whether to search the top or the bottom part of the file
+            if(reverseFile)
+            {
+                //Create an ArrayList object to store the part of the file to continue the search
+                ArrayList<String> fileLines = new ArrayList<>();
+
+                //Get the necessary lines from the file
+                for(int index = 0; index < linesToSkip; index++)
+                {
+                    fileLines.add(indexFileFileScanner.nextLine());
+                }
+
+                //If the word to be searched length is valid, scan every data page in the ArrayList, in reverse order
+                while(fileLines.size() != dataPageCounter && searchStatus)
+                {
+                    //Fetch the data page into the ByteBuffer
+                    ByteBuffer bytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(fileLines.get(fileLines.size() - dataPageCounter - 1), SizeConstants.getBufferSize()));
+
+                    //Search for the word to be searched in the data page
+                    searchStatus = LinearSearchBytePage(wordToBeSearched,bytePageBuffer.array(), matchingPositions);
+
+                    //Count the data page access
+                    dataPageCounter++;
+
+                    //Check if there no more occurrences of the word to be searched
+                    if(!matchingPositions.isEmpty())
+                    {
+                        //If there are continue the search
+                        if(wordOccurrences != matchingPositions.size())
+                        {
+                            wordOccurrences = matchingPositions.size();
+                        }
+                        else
+                        {
+                            //Stop the search
+                            searchStatus = false;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                //Skip lines of the file
+                SkipLines(indexFileFileScanner, linesToSkip);
+
+                //If the word to be searched length is valid, scan every data page in the file
+                while(indexFileFileScanner.hasNext() && searchStatus)
+                {
+                    //Fetch the data page into the ByteBuffer
+                    ByteBuffer bytePageBuffer = ByteBuffer.wrap(StringToByteArrayTranslator(indexFileFileScanner.nextLine(), SizeConstants.getBufferSize()));
+
+                    //Search for the word to be searched in the data page
+                    searchStatus = LinearSearchBytePage(wordToBeSearched,bytePageBuffer.array(), matchingPositions);
+
+                    //Count the data page access
+                    dataPageCounter++;
+
+                    //Check if there no more occurrences of the word to be searched
+                    if(!matchingPositions.isEmpty())
+                    {
+                        //If there are continue the search
+                        if(wordOccurrences != matchingPositions.size())
+                        {
+                            wordOccurrences = matchingPositions.size();
+                        }
+                        else
+                        {
+                            //Stop the search
+                            searchStatus = false;
+                        }
+                    }
+                }
+            }
+
+            //Close the FileScanner
+            indexFileFileScanner.close();
+
+            //Return the number of data page accesses
+            return dataPageCounter;
+        }
+        catch (FileNotFoundException e)
+        {
+            //Catch the FileNotFoundException and inform the user
+            System.out.println("File: " + this.Filename + " cannot be opened.");
+            e.printStackTrace();
+            return 0;
+        }
     }
 }
