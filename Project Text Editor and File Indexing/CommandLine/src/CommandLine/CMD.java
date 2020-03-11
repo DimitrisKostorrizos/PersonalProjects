@@ -697,17 +697,17 @@ public class CMD
                 dataPageAccessesCounter++;
 
                 //If the word's to be searched length is invalid or the word is found in the page, but is neither the first or the last word in the page
-                if (searchStatus == 0 || searchStatus == -1)
+                if (searchStatus == -2 || searchStatus == -1)
                 {
                     //Complete the binary search
                     break;
                 }
-                else if (searchStatus == 2)
+                else if (searchStatus == -3)
                 {
                     //If the search must be continued in the top part of the search area of the file
                     bottomFilePageIndex = middleFilePageIndex + 1;
                 }
-                else if (searchStatus == 1)
+                else if (searchStatus == -4)
                 {
                     //If the search must be continued in the bottom part of the search area of the file
                     topFilePageIndex = middleFilePageIndex - 1;
@@ -793,6 +793,9 @@ public class CMD
         //Get the index entry size in ASCII characters
         int indexEntrySize = (SizeConstants.getMaxWordSize() + 4);
 
+        //Record per data page
+        int entriesPerPage  = bytePage.length / indexEntrySize;
+
         //Initialize the String representation of the word in the data page entry
         String dataPageEntryWord = "";
 
@@ -806,16 +809,17 @@ public class CMD
         boolean foundAtLastEntry = false;
 
         //Search for every entry in the byte page
-        for(int index = 0; index < bytePage.length; index = index + indexEntrySize)
+        for(int index = 0; index < entriesPerPage; index++)
         {
+            int entryStartingPosition = index * indexEntrySize;
             //Get only the word from the data page and convert the bytes to ASCII characters
-            dataPageEntryWord = new String(Arrays.copyOfRange(bytePage, index, index + SizeConstants.getMaxWordSize())).replaceAll("\\s+","");
+            dataPageEntryWord = new String(Arrays.copyOfRange(bytePage, entryStartingPosition, entryStartingPosition + SizeConstants.getMaxWordSize())).replaceAll("\\s+","");
 
             //Compare the index entry word and the word to be searched
             if(dataPageEntryWord.equals(wordToBeSearched))
             {
                 //Get the line number from the index entry and add it to the ArrayList
-                matchingPositions.add(ByteBuffer.wrap(Arrays.copyOfRange(bytePage, index + SizeConstants.getMaxWordSize(), index + indexEntrySize)).getInt());
+                matchingPositions.add(ByteBuffer.wrap(Arrays.copyOfRange(bytePage, entryStartingPosition + SizeConstants.getMaxWordSize(), entryStartingPosition + indexEntrySize)).getInt());
                 if(index == 0)
                 {
                     //Mark that the word to be searched is matched to the first entry of the data page
@@ -845,32 +849,36 @@ public class CMD
             if(wordToBeSearched.compareTo(lastNonBlankWord) < 0)
             {
                 //Search the bottom part of the search area
-                return 1;
+                return -4;
             }
             else if(wordToBeSearched.compareTo(lastNonBlankWord) > 0)
             {
                 //Search the top part of the search area
-                return 2;
+                return -3;
             }
         }
         else
         {
+            //Count the new data page accesses
+            int dataPageAccesses = 0;
+
             //Search for other occurrences of the word to be searched in the bottom part
             if(foundAtFirstEntry)
             {
                 //Search the bottom part of the search area
-                return LinearSearchAfterBinary(filename, matchingPositions, wordToBeSearched, middleLine, true);
+                dataPageAccesses += LinearSearchAfterBinary(filename, matchingPositions, wordToBeSearched, middleLine, true);
             }
 
             //Search for other occurrences of the word to be searched, in the top part
             if(foundAtLastEntry)
             {
                 //Search the top part of the search area
-                return LinearSearchAfterBinary(filename, matchingPositions, wordToBeSearched, middleLine, false);
+                dataPageAccesses += LinearSearchAfterBinary(filename, matchingPositions, wordToBeSearched, middleLine, false);
             }
+            return dataPageAccesses;
         }
         //Continue the binary search normally
-        return  0;
+        return -2;
     }
 
     /**Read the index file and execute linear search for the word to be searched
