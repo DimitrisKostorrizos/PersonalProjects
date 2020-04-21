@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <a href="../UserForm/UserForm.html" id="userForm"></a>
+  <a href="../MainPage/MainPage.html" id="mainPage"></a>
+  <a href="../CompanyForm/CompanyForm.html" id="companyForm"></a>
+  <link rel="stylesheet" href="MainPageStyles.css">
+  <script type="text/javascript" src="MainPageFunctions.js"></script>
+</head>
+<body>
+
+<div class="topnav">
+  <a id="topNavButton" onclick="toggleTopNav()">&#9776;</a>
+  <div class="topnav-right">
+      <button id="userButton">Login/Sign Up</button>
+  </div>
+</div>
+
+<div id="leftSideBar" class="sidenav">
+  <a onclick="window.location.href=document.getElementById('mainPage');">Home Page</a>
+  <a onclick="window.location.href=document.getElementById('userForm');">For Users</a>
+  <a onclick="window.location.href=document.getElementById('companyForm');">For Companies</a>
+  <a href="#">Info</a>
+  <a href="#">Support</a>
+</div>
+
+</body>
+</html>
