@@ -1,0 +1,9 @@
+chmod +rwx input.txt
+chmod +rwx remoteServer.c 
+chmod +rwx remoteClient.c 
+
+./remoteServer 8080 1 &
+./remoteClient remoteServer 8080 9091 input.txt
+
+gcc remoteServer.c -o remoteServer
+gcc remoteClient.c -o remoteClient 
